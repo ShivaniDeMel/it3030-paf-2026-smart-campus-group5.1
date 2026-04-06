@@ -1,0 +1,17 @@
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\BackendApplication.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\config\DataInitializer.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\controller\AuthController.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\controller\FacilityController.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\dto\AuthResponse.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\dto\FacilityDTO.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\dto\LoginRequest.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\dto\RegisterRequest.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\entity\Facility.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\entity\User.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\entity\UserJPA.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\exception\GlobalExceptionHandler.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\repository\FacilityRepository.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\repository\UserJPARepository.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\repository\UserRepository.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\service\AuthServiceJPA.java
+C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\service\FacilityService.java
