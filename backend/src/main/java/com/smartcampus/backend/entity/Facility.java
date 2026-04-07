@@ -1,7 +1,9 @@
 package com.smartcampus.backend.entity;
 
 import jakarta.validation.constraints.*;
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -11,61 +13,57 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Entity
-@Table(name = "facilities")
+@Document(collection = "facilities")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Facility {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     
     @NotBlank(message = "Facility name is required")
     @Size(max = 100, message = "Facility name must not exceed 100 characters")
-    @Column(name = "name")
+    @Field("name")
     private String name;
     
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Field("type")
     private FacilityType type;
     
     @Min(value = 1, message = "Capacity must be at least 1")
     @Max(value = 1000, message = "Capacity must not exceed 1000")
-    @Column(name = "capacity")
+    @Field("capacity")
     private Integer capacity;
     
     @NotBlank(message = "Location is required")
     @Size(max = 200, message = "Location must not exceed 200 characters")
-    @Column(name = "location")
+    @Field("location")
     private String location;
     
-    @Column(name = "description")
+    @Field("description")
     private String description;
     
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Field("status")
     private FacilityStatus status;
     
-    @Column(name = "available_start_time")
+    @Field("available_start_time")
     private LocalTime availableStartTime;
     
-    @Column(name = "available_end_time")
+    @Field("available_end_time")
     private LocalTime availableEndTime;
     
-    @Column(name = "available_weekends")
+    @Field("available_weekends")
     private Boolean availableWeekends;
     
-    @Column(name = "image_url")
+    @Field("image_url")
     private String imageUrl;
     
     @CreatedDate
-    @Column(name = "created_at")
+    @Field("created_at")
     private LocalDateTime createdAt;
     
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Field("updated_at")
     private LocalDateTime updatedAt;
     
     public enum FacilityType {

@@ -25,7 +25,7 @@ const AddFacility = () => {
     capacity: '',
     location: '',
     description: '',
-    status: 'ACTIVE',
+    status: '', // Changed from 'ACTIVE' to empty string
     availableStartTime: '08:00',
     availableEndTime: '22:00',
     availableWeekends: false,
@@ -38,14 +38,26 @@ const AddFacility = () => {
 
   const fetchFilterOptions = async () => {
     try {
+      // Backend API calls enabled
       const [typesResponse, statusesResponse] = await Promise.all([
         facilityAPI.getFacilityTypes(),
         facilityAPI.getFacilityStatuses()
       ]);
       setFacilityTypes(typesResponse.data);
       setFacilityStatuses(statusesResponse.data);
+      
+      // Fallback mock data if backend fails
+      if (!typesResponse.data || typesResponse.data.length === 0) {
+        setFacilityTypes(['lecture_hall', 'laboratory', 'meeting_room', 'auditorium', 'sports_facility', 'study_area', 'equipment']);
+      }
+      if (!statusesResponse.data || statusesResponse.data.length === 0) {
+        setFacilityStatuses(['ACTIVE', 'MAINTENANCE', 'OUT_OF_SERVICE', 'UNDER_REVIEW']);
+      }
     } catch (err) {
       console.error('Error fetching filter options:', err);
+      // Fallback to mock data if backend connection fails
+      setFacilityTypes(['lecture_hall', 'laboratory', 'meeting_room', 'auditorium', 'sports_facility', 'study_area', 'equipment']);
+      setFacilityStatuses(['ACTIVE', 'MAINTENANCE', 'OUT_OF_SERVICE', 'UNDER_REVIEW']);
     }
   };
 
@@ -100,12 +112,12 @@ const AddFacility = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-700/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '6s' }}></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-orange-700/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '6s' }}></div>
       </div>
 
       {/* Main Content Container */}
@@ -119,10 +131,10 @@ const AddFacility = () => {
             <ArrowLeftIcon className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-3xl font-bold text-orange-400">
               Add New Facility
             </h1>
-            <p className="mt-1 text-gray-400">
+            <p className="mt-1 text-orange-300">
               Create a new facility for campus catalogue
             </p>
           </div>
@@ -147,7 +159,7 @@ const AddFacility = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6 flex-grow pb-24">
-          <div className="bg-gradient-to-br from-gray-900/80 to-black/90 backdrop-blur-md rounded-2xl shadow-2xl border border-blue-500/20">
+          <div className="bg-gradient-to-br from-black via-orange-900/30 to-black backdrop-blur-md rounded-2xl shadow-2xl border border-orange-600/30">
             <div className="p-6 space-y-6">
             {/* Basic Information */}
             <div>
@@ -156,7 +168,7 @@ const AddFacility = () => {
               </h3>
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="name" className="block text-sm font-medium text-orange-300 mb-1">
                     Facility Name *
                   </label>
                   <div className="relative">
@@ -168,7 +180,7 @@ const AddFacility = () => {
                       name="name"
                       id="name"
                       required
-                      className="block w-full pl-10 pr-3 py-2 border border-gray-700/50 rounded-md bg-gray-900/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-gray-500"
+                      className="block w-full pl-10 pr-3 py-2 border border-orange-600/50 rounded-md bg-black/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-orange-300/50"
                       placeholder="Enter facility name"
                       value={formData.name}
                       onChange={handleChange}
@@ -177,28 +189,38 @@ const AddFacility = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="type" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="type" className="block text-sm font-medium text-orange-300 mb-1">
                     Facility Type *
                   </label>
                   <select
                     name="type"
                     id="type"
                     required
-                    className="block w-full px-3 py-2 border border-gray-700/50 rounded-md bg-gray-900/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400"
+                    className="block w-full px-3 py-2 border border-orange-600/50 rounded-md bg-black/50 text-orange-300 focus:outline-none focus:ring-orange-500 focus:border-orange-400"
                     value={formData.type}
                     onChange={handleChange}
                   >
-                    <option value="">Select a type</option>
+                    <option value="" data-color="placeholder">Select a type</option>
                     {facilityTypes.map((type) => (
-                      <option key={type} value={type}>
+                      <option key={type} value={type} data-color="option">
                         {type.replace('_', ' ')}
                       </option>
                     ))}
                   </select>
+                  <style jsx>{`
+                    select option[data-color="placeholder"] {
+                      background-color: #1a1a1a !important;
+                      color: #fbbf24 !important;
+                    }
+                    select option[data-color="option"] {
+                      background-color: #ea580c !important;
+                      color: #ffffff !important;
+                    }
+                  `}</style>
                 </div>
 
                 <div>
-                  <label htmlFor="capacity" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="capacity" className="block text-sm font-medium text-orange-300 mb-1">
                     Capacity *
                   </label>
                   <div className="relative">
@@ -212,7 +234,7 @@ const AddFacility = () => {
                       required
                       min="1"
                       max="1000"
-                      className="block w-full pl-10 pr-3 py-2 border border-gray-700/50 rounded-md bg-gray-900/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-gray-500"
+                      className="block w-full pl-10 pr-3 py-2 border border-orange-600/50 rounded-md bg-black/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-orange-300/50"
                       placeholder="Enter capacity"
                       value={formData.capacity}
                       onChange={handleChange}
@@ -221,7 +243,7 @@ const AddFacility = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="location" className="block text-sm font-medium text-orange-300 mb-1">
                     Location *
                   </label>
                   <div className="relative">
@@ -233,7 +255,7 @@ const AddFacility = () => {
                       name="location"
                       id="location"
                       required
-                      className="block w-full pl-10 pr-3 py-2 border border-gray-700/50 rounded-md bg-gray-900/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-gray-500"
+                      className="block w-full pl-10 pr-3 py-2 border border-orange-600/50 rounded-md bg-black/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-orange-300/50"
                       placeholder="Enter location"
                       value={formData.location}
                       onChange={handleChange}
@@ -242,34 +264,44 @@ const AddFacility = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="status" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="status" className="block text-sm font-medium text-orange-300 mb-1">
                     Status *
                   </label>
                   <select
                     name="status"
                     id="status"
                     required
-                    className="block w-full px-3 py-2 border border-gray-700/50 rounded-md bg-gray-900/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400"
+                    className="block w-full px-3 py-2 border border-orange-600/50 rounded-md bg-black/50 text-orange-300 focus:outline-none focus:ring-orange-500 focus:border-orange-400"
                     value={formData.status}
                     onChange={handleChange}
                   >
-                    {facilityStatuses.map((status) => (
-                      <option key={status} value={status}>
-                        {status.replace('_', ' ')}
-                      </option>
-                    ))}
+                    <option value="" data-color="placeholder">Select a status</option>
+                    <option value="ACTIVE" data-color="option">Active</option>
+                    <option value="MAINTENANCE" data-color="option">Maintenance</option>
+                    <option value="OUT_OF_SERVICE" data-color="option">Out of Service</option>
+                    <option value="UNDER_REVIEW" data-color="option">Under Review</option>
                   </select>
+                  <style jsx>{`
+                    select option[data-color="placeholder"] {
+                      background-color: #1a1a1a !important;
+                      color: #fbbf24 !important;
+                    }
+                    select option[data-color="option"] {
+                      background-color: #ea580c !important;
+                      color: #ffffff !important;
+                    }
+                  `}</style>
                 </div>
 
                 <div>
-                  <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="imageUrl" className="block text-sm font-medium text-orange-300 mb-1">
                     Image URL
                   </label>
                   <input
                     type="url"
                     name="imageUrl"
                     id="imageUrl"
-                    className="block w-full px-3 py-2 border border-gray-700/50 rounded-md bg-gray-900/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-gray-500"
+                    className="block w-full px-3 py-2 border border-orange-600/50 rounded-md bg-black/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-orange-300/50"
                     placeholder="https://example.com/image.jpg"
                     value={formData.imageUrl}
                     onChange={handleChange}
@@ -287,7 +319,7 @@ const AddFacility = () => {
                 name="description"
                 id="description"
                 rows={4}
-                className="block w-full px-3 py-2 border border-gray-700/50 rounded-md bg-gray-900/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-gray-500"
+                className="block w-full px-3 py-2 border border-orange-600/50 rounded-md bg-black/50 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-400 placeholder-orange-300/50"
                 placeholder="Enter facility description"
                 value={formData.description}
                 onChange={handleChange}

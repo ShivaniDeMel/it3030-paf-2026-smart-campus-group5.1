@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class FacilityDTO {
     
-    private Long id;
+    private String id;
     private String name;
     private Facility.FacilityType type;
     private Integer capacity;

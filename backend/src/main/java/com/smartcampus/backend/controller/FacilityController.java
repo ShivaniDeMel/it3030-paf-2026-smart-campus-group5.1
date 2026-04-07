@@ -33,11 +33,8 @@ public class FacilityController {
     @GetMapping("/{id}")
     public ResponseEntity<FacilityDTO> getFacility(@PathVariable String id) {
         try {
-            Long facilityId = Long.parseLong(id);
-            FacilityDTO facility = facilityService.getFacilityById(facilityId);
+            FacilityDTO facility = facilityService.getFacilityById(id);
             return ResponseEntity.ok(facility);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
@@ -59,11 +56,8 @@ public class FacilityController {
             @PathVariable String id,
             @Valid @RequestBody FacilityDTO facilityDTO) {
         try {
-            Long facilityId = Long.parseLong(id);
-            FacilityDTO updatedFacility = facilityService.updateFacility(facilityId, facilityDTO);
+            FacilityDTO updatedFacility = facilityService.updateFacility(id, facilityDTO);
             return ResponseEntity.ok(updatedFacility);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
@@ -72,11 +66,8 @@ public class FacilityController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFacility(@PathVariable String id) {
         try {
-            Long facilityId = Long.parseLong(id);
-            facilityService.deleteFacility(facilityId);
+            facilityService.deleteFacility(id);
             return ResponseEntity.noContent().build();
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }

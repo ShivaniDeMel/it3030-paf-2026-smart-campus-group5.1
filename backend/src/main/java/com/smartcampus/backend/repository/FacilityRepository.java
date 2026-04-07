@@ -1,15 +1,15 @@
 package com.smartcampus.backend.repository;
 
 import com.smartcampus.backend.entity.Facility;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface FacilityRepository extends JpaRepository<Facility, Long> {
+public interface FacilityRepository extends MongoRepository<Facility, String> {
     
     List<Facility> findByType(Facility.FacilityType type);
     
@@ -19,13 +19,14 @@ public interface FacilityRepository extends JpaRepository<Facility, Long> {
     
     List<Facility> findByNameContainingIgnoreCase(String name);
     
-    @Query("SELECT f FROM Facility f WHERE " +
-           "(:type IS NULL OR f.type = :type) AND " +
-           "(:status IS NULL OR f.status = :status) AND " +
-           "(:location IS NULL OR LOWER(f.location) LIKE LOWER(CONCAT('%', :location, '%'))) AND " +
-           "(:name IS NULL OR LOWER(f.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-           "(:minCapacity IS NULL OR f.capacity >= :minCapacity) AND " +
-           "(:maxCapacity IS NULL OR f.capacity <= :maxCapacity)")
+    @Query("{ '$and': [ " +
+           "{ '$or': [ { 'type': ?0 }, { 'type': null } ] }, " +
+           "{ '$or': [ { 'status': ?1 }, { 'status': null } ] }, " +
+           "{ '$or': [ { 'location': { '$regex': ?2, '$options': 'i' } }, { 'location': null } ] }, " +
+           "{ '$or': [ { 'name': { '$regex': ?3, '$options': 'i' } }, { 'name': null } ] }, " +
+           "{ '$or': [ { 'capacity': { '$gte': ?4 } }, { 'capacity': null } ] }, " +
+           "{ '$or': [ { 'capacity': { '$lte': ?5 } }, { 'capacity': null } ] } " +
+           "] }")
     List<Facility> searchFacilities(
             @Param("type") Facility.FacilityType type,
             @Param("status") Facility.FacilityStatus status,

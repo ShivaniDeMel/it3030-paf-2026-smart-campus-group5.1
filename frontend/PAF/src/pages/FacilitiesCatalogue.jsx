@@ -227,12 +227,12 @@ const FacilitiesCatalogue = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-700/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '6s' }}></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-orange-700/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '6s' }}></div>
       </div>
 
       <div className="relative z-10">
@@ -267,17 +267,17 @@ const FacilitiesCatalogue = () => {
         </div>
       
         {/* Search and Filters */}
-        <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-md rounded-2xl shadow-2xl border border-blue-500/30 p-6 mb-8 animate-slide-in" style={{ animationDelay: '0.5s' }}>
+        <div className="bg-gradient-to-br from-black via-orange-900/50 to-black backdrop-blur-md rounded-2xl shadow-2xl border border-orange-700/50 p-6 mb-8 animate-slide-in" style={{ animationDelay: '0.5s' }}>
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search Bar */}
             <div className="flex-1">
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <MagnifyingGlassIcon className="h-5 w-5 text-blue-400 group-hover:text-blue-300 transition-colors" />
+                  <MagnifyingGlassIcon className="h-5 w-5 text-orange-400 group-hover:text-orange-300 transition-colors" />
                 </div>
                 <input
                   type="text"
-                  className="block w-full pl-12 pr-4 py-3 border border-blue-500/30 rounded-xl bg-gray-900/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400 transition-all duration-300"
+                  className="block w-full pl-12 pr-4 py-3 border border-orange-700/50 rounded-xl bg-black/50 text-white placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-400 transition-all duration-300"
                   placeholder="Search amazing facilities..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -290,9 +290,9 @@ const FacilitiesCatalogue = () => {
               {/* Filter Toggle */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="group relative px-6 py-3 border border-blue-500/30 text-sm font-medium rounded-xl text-blue-300 bg-blue-900/50 hover:bg-blue-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
+                className="group relative px-6 py-3 border border-orange-700/50 text-sm font-medium rounded-xl text-orange-300 bg-black/50 hover:bg-orange-900/50 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 transform hover:scale-105"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300"></div>
                 <div className="relative flex items-center">
                   <FunnelIcon className="h-4 w-4 mr-2" />
                   <span>Filters</span>
@@ -303,9 +303,9 @@ const FacilitiesCatalogue = () => {
               {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
-                  className="group relative px-6 py-3 border border-gray-500/30 text-sm font-medium rounded-xl text-gray-300 bg-gray-900/50 hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-300 transform hover:scale-105"
+                  className="group relative px-6 py-3 border border-orange-700/50 text-sm font-medium rounded-xl text-orange-300 bg-black/50 hover:bg-orange-900/50 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 transform hover:scale-105"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-600 rounded-xl opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300"></div>
                   <div className="relative flex items-center">
                     <XMarkIcon className="h-4 w-4 mr-2" />
                     <span>Clear Filters</span>
@@ -384,16 +384,28 @@ const FacilitiesCatalogue = () => {
 
         {/* Facilities Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {facilities.map((facility, index) => (
-            <Link
-              key={facility.id}
-              to={`/facilities/${facility.id}`}
-              className="group relative overflow-hidden bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-md border border-blue-500/30 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-500 animate-bounce-in hover:border-blue-400/50"
-              style={{ 
-                animationDelay: `${index * 0.1}s`,
-                minHeight: '480px'
-              }}
-            >
+          {facilities.map((facility, index) => {
+            // Define gradient colors array
+            const gradients = [
+              'from-black via-green-500/50 to-black',      // Green 50%
+              'from-black via-purple-500/50 to-black',    // Purple 50%  
+              'from-black via-orange-500/50 to-black',     // Orange 50%
+              'from-black via-red-500/50 to-black',           // Red 50%
+              'from-black via-yellow-500/50 to-black',      // Yellow 50%
+              'from-black via-pink-500/50 to-black'           // Pink 50%
+            ];
+            const gradient = gradients[index % gradients.length];
+            
+            return (
+              <Link
+                key={facility.id}
+                to={`/facilities/${facility.id}`}
+                className={`group relative overflow-hidden bg-gradient-to-br ${gradient} backdrop-blur-md border border-white/20 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-500 animate-bounce-in hover:border-white/40`}
+                style={{ 
+                  animationDelay: `${index * 0.1}s`,
+                  minHeight: '480px'
+                }}
+              >
               <div className="relative z-10 p-6 h-full flex flex-col">
                 {/* Status Badge */}
                 <div className="absolute top-4 right-4 z-20">
@@ -418,42 +430,43 @@ const FacilitiesCatalogue = () => {
 
                 {/* Facility Content */}
                 <div className="space-y-3 flex-1 flex flex-col">
-                  <h3 className="text-xl font-bold text-white group-hover:text-blue-300 transition-colors line-clamp-1">
+                  <h3 className="text-xl font-bold text-white drop-shadow-lg group-hover:text-yellow-300 transition-colors line-clamp-1">
                     {facility.name}
                   </h3>
                   
-                  <div className="flex items-center gap-4 text-sm text-gray-300">
+                  <div className="flex items-center gap-4 text-sm text-white font-medium">
                     <div className="flex items-center gap-1">
-                      <MapPinIcon className="h-4 w-4 text-blue-400" />
-                      <span className="line-clamp-1">{facility.location}</span>
+                      <MapPinIcon className="h-4 w-4 text-yellow-400 drop-shadow" />
+                      <span className="line-clamp-1 drop-shadow">{facility.location}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <UserGroupIcon className="h-4 w-4 text-green-400" />
-                      <span>{facility.capacity} people</span>
+                      <UserGroupIcon className="h-4 w-4 text-cyan-400 drop-shadow" />
+                      <span className="drop-shadow">{facility.capacity} people</span>
                     </div>
                   </div>
 
-                  <p className="text-gray-400 line-clamp-2 text-sm leading-relaxed flex-1">
+                  <p className="text-white/90 line-clamp-2 text-sm leading-relaxed flex-1 drop-shadow">
                     {facility.description}
                   </p>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-700/50 mt-auto">
+                  <div className="flex items-center justify-between pt-4 border-t border-white/30 mt-auto">
                     <div className="flex items-center gap-2">
-                      <StarIcon className="h-4 w-4 text-yellow-400" />
-                      <span className="text-sm text-gray-300">{facility.bookingCount} bookings</span>
+                      <StarIcon className="h-4 w-4 text-yellow-400 drop-shadow" />
+                      <span className="text-sm text-white font-medium drop-shadow">{facility.bookingCount} bookings</span>
                     </div>
-                    <div className="flex items-center gap-1 text-blue-400 group-hover:text-blue-300 transition-colors">
-                      <span className="text-sm font-medium">View Details</span>
-                      <ArrowRightIcon className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    <div className="flex items-center gap-1 text-white group-hover:text-yellow-300 transition-colors">
+                      <span className="text-sm font-bold drop-shadow">View Details</span>
+                      <ArrowRightIcon className="h-5 w-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </div>
 
                 {/* Hover Effect */}
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

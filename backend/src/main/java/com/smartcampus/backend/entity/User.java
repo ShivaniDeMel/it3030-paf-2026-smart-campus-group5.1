@@ -1,6 +1,8 @@
 package com.smartcampus.backend.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -11,48 +13,45 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "users")
+@Document(collection = "users")
 public class User {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     
-    @Column(name = "first_name")
+    @Field("first_name")
     private String firstName;
     
-    @Column(name = "last_name")
+    @Field("last_name")
     private String lastName;
     
-    @Column(name = "email")
+    @Field("email")
     private String email;
     
-    @Column(name = "phone")
+    @Field("phone")
     private String phone;
     
-    @Column(name = "password")
+    @Field("password")
     private String password;
     
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Field("role")
     private UserRole role;
     
-    @Column(name = "is_active")
+    @Field("is_active")
     private Boolean isActive = true;
     
-    @Column(name = "is_verified")
+    @Field("is_verified")
     private Boolean isVerified = false;
     
-    @Column(name = "last_login")
+    @Field("last_login")
     private LocalDateTime lastLogin;
     
     @CreatedDate
-    @Column(name = "created_at")
+    @Field("created_at")
     private LocalDateTime createdAt;
     
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Field("updated_at")
     private LocalDateTime updatedAt;
     
     public enum UserRole {

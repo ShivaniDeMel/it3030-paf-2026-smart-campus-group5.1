@@ -42,7 +42,7 @@ public class FacilityService {
         return FacilityDTO.fromEntity(savedFacility);
     }
     
-    public FacilityDTO updateFacility(Long id, FacilityDTO facilityDTO) {
+    public FacilityDTO updateFacility(String id, FacilityDTO facilityDTO) {
         Facility existingFacility = facilityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Facility not found with id: " + id));
         
@@ -57,14 +57,14 @@ public class FacilityService {
         return FacilityDTO.fromEntity(updatedFacility);
     }
     
-    public void deleteFacility(Long id) {
+    public void deleteFacility(String id) {
         if (!facilityRepository.existsById(id)) {
             throw new IllegalArgumentException("Facility not found with id: " + id);
         }
         facilityRepository.deleteById(id);
     }
     
-    public FacilityDTO getFacilityById(Long id) {
+    public FacilityDTO getFacilityById(String id) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Facility not found with id: " + id));
         return FacilityDTO.fromEntity(facility);

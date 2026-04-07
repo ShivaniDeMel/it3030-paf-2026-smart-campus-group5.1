@@ -91,13 +91,13 @@ const Dashboard = () => {
   ];
 
   const facilityTypes = [
-    { type: 'lecture_hall', count: statistics.type_lecture_hall || 0, color: 'from-purple-500 to-purple-600' },
-    { type: 'laboratory', count: statistics.type_laboratory || 0, color: 'from-indigo-500 to-indigo-600' },
-    { type: 'meeting_room', count: statistics.type_meeting_room || 0, color: 'from-pink-500 to-pink-600' },
-    { type: 'auditorium', count: statistics.type_auditorium || 0, color: 'from-teal-500 to-teal-600' },
-    { type: 'sports_facility', count: statistics.type_sports_facility || 0, color: 'from-orange-500 to-orange-600' },
-    { type: 'study_area', count: statistics.type_study_area || 0, color: 'from-cyan-500 to-cyan-600' },
-    { type: 'equipment', count: statistics.type_equipment || 0, color: 'from-lime-500 to-lime-600' }
+    { type: 'lecture_hall', count: statistics.type_lecture_hall || 0, color: 'from-blue-500 to-blue-600' },
+    { type: 'laboratory', count: statistics.type_laboratory || 0, color: 'from-green-500 to-green-600' },
+    { type: 'meeting_room', count: statistics.type_meeting_room || 0, color: 'from-purple-500 to-purple-600' },
+    { type: 'auditorium', count: statistics.type_auditorium || 0, color: 'from-orange-500 to-orange-600' },
+    { type: 'sports_facility', count: statistics.type_sports_facility || 0, color: 'from-red-500 to-red-600' },
+    { type: 'study_area', count: statistics.type_study_area || 0, color: 'from-yellow-500 to-yellow-600' },
+    { type: 'equipment', count: statistics.type_equipment || 0, color: 'from-pink-500 to-pink-600' }
   ];
 
   if (loading) {
@@ -137,19 +137,19 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-700/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '6s' }}></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-orange-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '6s' }}></div>
       </div>
 
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center mb-8 animate-slide-in">
             <div className="flex items-center space-x-4">
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg animate-pulse-glow">
+              <div className="p-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl shadow-lg animate-pulse-glow">
                 <FireIcon className="h-8 w-8 text-white" />
               </div>
               <div>
@@ -201,19 +201,19 @@ const Dashboard = () => {
           </div>
 
           {/* Facility Types */}
-          <div className="bg-white dark:bg-secondary-800 rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
-            <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-6 flex items-center gap-2">
-              <SparklesIcon className="h-6 w-6 text-blue-500" />
+          <div className="bg-gradient-to-r from-black via-orange-900 to-black rounded-2xl shadow-xl p-6 mb-8 animate-slide-in border border-orange-700">
+            <h2 className="text-2xl font-bold text-orange-100 dark:text-orange-100 mb-6 flex items-center gap-2">
+              <SparklesIcon className="h-6 w-6 text-orange-400" />
               Facility Types Distribution
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {facilityTypes.map((facilityType, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg bg-secondary-50 dark:bg-secondary-700 hover:bg-secondary-100 dark:hover:bg-secondary-600 transition-colors duration-300">
+                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg bg-black/50 hover:bg-black/70 transition-colors duration-300 border border-orange-800/50">
                   <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${facilityType.color}`}></div>
-                  <span className="text-sm text-secondary-600 dark:text-secondary-400 capitalize">
+                  <span className="text-sm text-orange-200 capitalize">
                     {facilityType.type.replace('_', ' ')}
                   </span>
-                  <span className="text-sm font-bold text-secondary-900 dark:text-white">
+                  <span className="text-sm font-bold text-orange-100">
                     {facilityType.count}
                   </span>
                 </div>
@@ -222,9 +222,9 @@ const Dashboard = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-secondary-800 dark:to-secondary-700 rounded-2xl shadow-xl p-6 animate-slide-in">
-            <h2 className="text-2xl font-bold text-secondary-900 dark:text-white mb-6 flex items-center gap-2">
-              <FireIcon className="h-6 w-6 text-blue-500" />
+          <div className="bg-gradient-to-r from-black via-orange-900 to-black rounded-2xl shadow-xl p-6 animate-slide-in border border-orange-700">
+            <h2 className="text-2xl font-bold text-orange-100 dark:text-orange-100 mb-6 flex items-center gap-2">
+              <FireIcon className="h-6 w-6 text-orange-400" />
               Quick Actions
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -237,14 +237,14 @@ const Dashboard = () => {
               </Link>
               <Link
                 to="/facilities/add"
-                className="button-secondary flex items-center justify-center gap-2"
+                className="button-primary flex items-center justify-center gap-2"
               >
                 <PlusCircleIcon className="h-5 w-5" />
                 Add New Facility
               </Link>
               <button
                 onClick={fetchStatistics}
-                className="button-secondary flex items-center justify-center gap-2"
+                className="button-primary flex items-center justify-center gap-2"
               >
                 <ClockIcon className="h-5 w-5" />
                 Refresh Data

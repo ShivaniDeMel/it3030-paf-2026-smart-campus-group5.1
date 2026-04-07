@@ -4,13 +4,10 @@ com\smartcampus\backend\dto\LoginRequest.class
 com\smartcampus\backend\dto\AuthResponse.class
 com\smartcampus\backend\dto\RegisterRequest.class
 com\smartcampus\backend\entity\Facility$FacilityType.class
-com\smartcampus\backend\repository\UserJPARepository.class
 com\smartcampus\backend\entity\Facility.class
 com\smartcampus\backend\service\AuthServiceJPA.class
 com\smartcampus\backend\entity\Facility$FacilityStatus.class
 com\smartcampus\backend\dto\FacilityDTO.class
-com\smartcampus\backend\entity\UserJPA$UserRole.class
-com\smartcampus\backend\entity\UserJPA.class
 com\smartcampus\backend\dto\AuthResponse$UserInfo.class
 com\smartcampus\backend\entity\User.class
 com\smartcampus\backend\controller\AuthController.class
