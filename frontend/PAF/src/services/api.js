@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8085/api';
+const API_BASE_URL = 'http://localhost:8089/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -46,10 +46,28 @@ export const facilityAPI = {
   getFacilityById: (id) => api.get(`/facilities/${id}`),
   
   // Create new facility
-  createFacility: (facilityData) => api.post('/facilities', facilityData),
+  createFacility: (facilityData) => {
+    if (facilityData instanceof FormData) {
+      return api.post('/facilities', facilityData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    }
+    return api.post('/facilities', facilityData);
+  },
   
   // Update facility
-  updateFacility: (id, facilityData) => api.put(`/facilities/${id}`, facilityData),
+  updateFacility: (id, facilityData) => {
+    if (facilityData instanceof FormData) {
+      return api.put(`/facilities/${id}`, facilityData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    }
+    return api.put(`/facilities/${id}`, facilityData);
+  },
   
   // Delete facility
   deleteFacility: (id) => api.delete(`/facilities/${id}`),
@@ -64,7 +82,7 @@ export const facilityAPI = {
   getFacilitiesByStatus: (status) => api.get(`/facilities/status/${status}`),
   
   // Get facility statistics
-  getFacilityStatistics: () => api.get('/facilities/statistics'),
+  getFacilityStatistics: () => api.get('/facilities/statistics', { timeout: 3000 }),
   
   // Get facility types
   getFacilityTypes: () => api.get('/facilities/types'),

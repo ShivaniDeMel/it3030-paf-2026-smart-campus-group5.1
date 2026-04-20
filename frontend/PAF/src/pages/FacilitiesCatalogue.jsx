@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { facilityAPI } from '../services/api';
 import { 
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -17,7 +18,6 @@ import {
 
 const FacilitiesCatalogue = () => {
   const [facilities, setFacilities] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
@@ -38,74 +38,22 @@ const FacilitiesCatalogue = () => {
 
   const fetchFacilities = async () => {
     try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      
-      // Mock data for development
-      const mockFacilities = [
-        {
-          id: 1,
-          name: 'Computer Lab A',
-          type: 'LABORATORY',
-          status: 'ACTIVE',
-          capacity: 30,
-          location: 'Building A - Floor 2',
-          description: 'Modern computer laboratory with 30 workstations',
-          amenities: ['WiFi', 'Projector', 'Whiteboard'],
-          image: 'https://via.placeholder.com/150x150?text=Computer+Lab',
-          bookingCount: 45
-        },
-        {
-          id: 2,
-          name: 'Study Room 101',
-          type: 'STUDY_ROOM',
-          status: 'ACTIVE',
-          capacity: 20,
-          location: 'Building B - Floor 1',
-          description: 'Quiet study room with individual desks',
-          amenities: ['WiFi', 'Power Outlets', 'Air Conditioning'],
-          image: 'https://via.placeholder.com/150x150?text=Study+Room',
-          bookingCount: 32
-        },
-        {
-          id: 3,
-          name: 'Conference Hall',
-          type: 'CONFERENCE_ROOM',
-          status: 'MAINTENANCE',
-          capacity: 50,
-          location: 'Building C - Floor 3',
-          description: 'Large conference hall with presentation equipment',
-          amenities: ['WiFi', 'Projector', 'Sound System'],
-          image: 'https://via.placeholder.com/150x150?text=Conference+Hall',
-          bookingCount: 28
-        }
-      ];
-      
-      setFacilities(mockFacilities);
+      const response = await facilityAPI.getAllFacilities();
+      setFacilities(response.data);
     } catch (err) {
       setError('Failed to load facilities');
       console.error('Error fetching facilities:', err);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchFilterOptions = async () => {
     try {
-      // Temporarily disabled - uncomment when backend is running
-      // const [typesResponse, statusesResponse] = await Promise.all([
-      //   facilityAPI.getFacilityTypes(),
-      //   facilityAPI.getFacilityStatuses()
-      // ]);
-      // setFacilityTypes(typesResponse.data);
-      // setFacilityStatuses(statusesResponse.data);
-      
-      // Mock data for development
-      const mockTypes = ['LABORATORY', 'STUDY_ROOM', 'CONFERENCE_ROOM', 'AUDITORIUM', 'SPORTS_COMPLEX'];
-      const mockStatuses = ['ACTIVE', 'MAINTENANCE', 'OUT_OF_SERVICE', 'RESERVED'];
-      
-      setFacilityTypes(mockTypes);
-      setFacilityStatuses(mockStatuses);
+      const [typesResponse, statusesResponse] = await Promise.all([
+        facilityAPI.getFacilityTypes(),
+        facilityAPI.getFacilityStatuses()
+      ]);
+      setFacilityTypes(typesResponse.data);
+      setFacilityStatuses(statusesResponse.data);
     } catch (err) {
       console.error('Error fetching filter options:', err);
     }
@@ -180,27 +128,6 @@ const FacilitiesCatalogue = () => {
   };
 
   const hasActiveFilters = Object.values(filters).some(value => value !== '') || searchTerm !== '';
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
-        </div>
-        
-        <div className="relative z-10 text-center">
-          <div className="relative">
-            <div className="w-24 h-24 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin"></div>
-            <div className="absolute inset-0 w-24 h-24 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full opacity-20 blur-lg"></div>
-          </div>
-          <p className="mt-6 text-white text-lg font-medium animate-pulse">Loading amazing facilities...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -421,9 +348,12 @@ const FacilitiesCatalogue = () => {
                 {/* Facility Image */}
                 <div className="relative mb-4 overflow-hidden rounded-xl h-48">
                   <img
-                    src={facility.image}
+                    src={facility.images && facility.images.length > 0 ? facility.images[0] : 'https://via.placeholder.com/400x300/ea580c/ffffff?text=No+Image'}
                     alt={facility.name}
                     className="w-full h-full object-cover rounded-xl transform group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/400x300/ea580c/ffffff?text=Image+Error';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
                 </div>

@@ -14,8 +14,15 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Dashboard = () => {
-  const [statistics, setStatistics] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [statistics, setStatistics] = useState({
+    total: 0,
+    status_active: 0,
+    status_maintenance: 0,
+    status_out_of_service: 0,
+    status_under_review: 0,
+    utilization_rate: 0,
+    booking_trends: { daily: [], weekly: [] }
+  });
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -23,36 +30,16 @@ const Dashboard = () => {
   }, []);
 
   const fetchStatistics = async () => {
-    setLoading(true);
-    setError(null);
-    
     try {
-      // Temporarily disabled - uncomment when backend is running
-      // const response = await Promise.race([
-      //   facilityAPI.getFacilityStatistics(),
-      //   timeoutPromise
-      // ]);
-      
-      // Mock data for development
-      const mockData = {
-        total: 25,
-        status_active: 18,
-        status_maintenance: 4,
-        status_out_of_service: 3,
-        utilization_rate: 72,
-        booking_trends: {
-          daily: [12, 15, 18, 14, 20],
-          weekly: [85, 92, 78, 95, 88]
-        }
-      };
-      
-      setStatistics(mockData);
+      const response = await facilityAPI.getFacilityStatistics();
+      setStatistics(prev => ({ ...prev, ...response.data }));
     } catch (err) {
       setError('Failed to load statistics. Please try again.');
-      console.error('Error fetching statistics:', err);
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const handleRetry = () => {
+    fetchStatistics();
   };
 
   const statCards = [
@@ -100,37 +87,20 @@ const Dashboard = () => {
     { type: 'equipment', count: statistics.type_equipment || 0, color: 'from-pink-500 to-pink-600' }
   ];
 
-  if (loading) {
-    return (
-      <div className="flex flex-col justify-center items-center h-64 space-y-4 animate-fade-in">
-        <div className="relative">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600"></div>
-          <div className="absolute inset-0 rounded-full h-16 w-16 bg-gradient-to-r from-blue-500 to-blue-600 opacity-20 animate-pulse"></div>
-        </div>
-        <p className="text-secondary-600 dark:text-secondary-400 font-medium animate-float">Loading dashboard statistics...</p>
-      </div>
-    );
-  }
-
   if (error) {
     return (
-      <div className="bg-gradient-to-r from-red-50 to-blue-50 dark:from-red-900/20 dark:to-blue-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 animate-slide-in">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <XCircleIcon className="h-6 w-6 text-red-500 animate-pulse" />
+      <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="mb-4">
+            <XCircleIcon className="h-12 w-12 text-red-400 mx-auto" />
           </div>
-          <div className="ml-4">
-            <h3 className="text-sm font-semibold text-red-800 dark:text-red-200">Connection Error</h3>
-            <div className="mt-2 text-sm text-red-700 dark:text-red-300">{error}</div>
-            <div className="mt-4">
-              <button
-                onClick={fetchStatistics}
-                className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
-              >
-                Retry
-              </button>
-            </div>
-          </div>
+          <p className="text-red-300 mb-4">{error}</p>
+          <button
+            onClick={handleRetry}
+            className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -147,7 +117,7 @@ const Dashboard = () => {
 
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-between items-center mb-8 animate-slide-in">
+          <div className="flex justify-between items-center mb-8 animate-fade-in">
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl shadow-lg animate-pulse-glow">
                 <FireIcon className="h-8 w-8 text-white" />

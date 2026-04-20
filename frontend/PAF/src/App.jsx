@@ -10,6 +10,7 @@ import FacilitiesCatalogue from './pages/FacilitiesCatalogue';
 import FacilityDetails from './pages/FacilityDetails';
 import AddFacility from './pages/AddFacility';
 import EditFacility from './pages/EditFacility';
+import BookingWorkflow from './pages/BookingWorkflow';
 import './App.css';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/facilities/:id" element={<FacilityDetails />} />
                 <Route path="/facilities/add" element={<AddFacility />} />
                 <Route path="/facilities/edit/:id" element={<EditFacility />} />
+                <Route path="/booking-workflow/:id" element={<BookingWorkflow />} />
               </Routes>
             </main>
             
