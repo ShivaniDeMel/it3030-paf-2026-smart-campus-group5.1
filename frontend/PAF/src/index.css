@@ -1,3 +1,127 @@
+<<<<<<< HEAD
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --text: #4b5563;
+    --text-h: #111827;
+    --bg: #ffffff;
+    --border: #e5e7eb;
+    --code-bg: #f9fafb;
+    --accent: #f97316;
+    --accent-bg: rgba(249, 115, 22, 0.1);
+    --accent-border: rgba(249, 115, 22, 0.5);
+    --social-bg: rgba(249, 246, 237, 0.5);
+    --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    --orange-glow: rgba(249, 115, 22, 0.3);
+    --black-glow: rgba(17, 24, 39, 0.3);
+  }
+
+  .dark {
+    --text: #d1d5db;
+    --text-h: #f9fafb;
+    --bg: #111827;
+    --border: #374151;
+    --code-bg: #1f2937;
+    --accent: #fb923c;
+    --accent-bg: rgba(251, 146, 60, 0.15);
+    --accent-border: rgba(251, 146, 60, 0.5);
+    --social-bg: rgba(55, 65, 81, 0.5);
+    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --orange-glow: rgba(251, 146, 60, 0.4);
+    --black-glow: rgba(31, 41, 55, 0.4);
+  }
+}
+
+@layer components {
+  body {
+    @apply bg-white dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent;
+  }
+
+  .gradient-border {
+    background: linear-gradient(135deg, #f97316, #111827);
+    padding: 2px;
+    border-radius: 0.5rem;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 transform hover:scale-105 hover:shadow-2xl;
+  }
+
+  .button-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300;
+  }
+
+  .button-secondary {
+    @apply bg-secondary-800 dark:bg-secondary-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/20 dark:bg-secondary-900/20 border border-white/30 dark:border-secondary-700/30;
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px var(--orange-glow), 0 0 40px var(--orange-glow);
+  }
+
+  .neon-glow-black {
+    box-shadow: 0 0 20px var(--black-glow), 0 0 40px var(--black-glow);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-secondary-100 dark:bg-secondary-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-b from-primary-500 to-primary-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply from-primary-600 to-primary-800;
+}
+
+/* Selection color */
+::selection {
+  @apply bg-primary-500 text-white;
+}
+
+::-moz-selection {
+  @apply bg-primary-500 text-white;
+}
+
+/* Loading animation */
+.loading-spinner {
+  @apply animate-spin rounded-full border-4 border-primary-200 border-t-primary-600;
+=======
 @import "tailwindcss";
 
 body {
@@ -7,4 +131,5 @@ body {
 
 #root {
   min-height: 100vh;
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
 }
