@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +65,8 @@ public class UserService {
     }
     
     @Transactional
-    public User updateUser(@NonNull String id, @NonNull User userDetails) {
+    @SuppressWarnings("type.uncertainty")
+    public @Nullable User updateUser(@NonNull String id, @NonNull User userDetails) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
@@ -110,8 +112,8 @@ public class UserService {
         }
         
         @SuppressWarnings("null")
-        User savedUser = userRepository.save(user);
-        return savedUser;
+        User result = userRepository.save(user);
+        return result;
     }
     
     @Transactional

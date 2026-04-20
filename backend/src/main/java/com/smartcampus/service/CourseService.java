@@ -8,6 +8,7 @@ import com.smartcampus.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,8 @@ public class CourseService {
     }
     
     @Transactional
-    public Course updateCourse(@NonNull String id, @NonNull Course courseDetails) {
+    @SuppressWarnings("type.uncertainty")
+    public @Nullable Course updateCourse(@NonNull String id, @NonNull Course courseDetails) {
         Course course = courseRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
         
@@ -111,8 +113,8 @@ public class CourseService {
         }
         
         @SuppressWarnings("null")
-        Course savedCourse = courseRepository.save(course);
-        return savedCourse;
+        Course result = courseRepository.save(course);
+        return result;
     }
     
     @Transactional
