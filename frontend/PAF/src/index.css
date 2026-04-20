@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -120,4 +121,15 @@
 /* Loading animation */
 .loading-spinner {
   @apply animate-spin rounded-full border-4 border-primary-200 border-t-primary-600;
+=======
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
 }

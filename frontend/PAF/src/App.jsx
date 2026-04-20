@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+<<<<<<< HEAD
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -12,10 +13,18 @@ import AddFacility from './pages/AddFacility';
 import EditFacility from './pages/EditFacility';
 import BookingWorkflow from './pages/BookingWorkflow';
 import './App.css';
+=======
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import LoginPage from './pages/LoginPage';
+import UserBookings from './pages/UserBookings';
+import AdminBookings from './pages/AdminBookings';
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
 
 function App() {
   return (
     <Router>
+<<<<<<< HEAD
       <AuthProvider>
         <div className="min-h-screen bg-gray-50">
           <div className="bg-white text-gray-900 min-h-screen flex flex-col">
@@ -39,8 +48,26 @@ function App() {
           </div>
         </div>
       </AuthProvider>
+=======
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Navbar />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<UserBookings />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/bookings" element={<UserBookings />} />
+            <Route path="/admin/bookings" element={<AdminBookings />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
     </Router>
   );
 }
 
 export default App;
+<<<<<<< HEAD
+=======
+
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a

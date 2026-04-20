@@ -49,6 +49,7 @@ const Footer = () => {
   ];
 
   return (
+<<<<<<< HEAD
     <footer className="relative bg-gradient-to-br from-secondary-900 via-secondary-800 to-secondary-900 text-white">
       {/* Animated Background Pattern */}
       <div className="absolute inset-0 opacity-5">
@@ -62,6 +63,16 @@ const Footer = () => {
           {/* Top Section */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-12">
             {/* Brand Section */}
+=======
+    <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-transparent"></div>
+      </div>
+      
+      <div className="relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-12">
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center space-x-3">
                 <div className="relative group">
@@ -77,11 +88,17 @@ const Footer = () => {
               </div>
               
               <p className="text-gray-300 leading-relaxed max-w-md">
+<<<<<<< HEAD
                 Empowering campus management with cutting-edge technology and seamless operations. 
                 Your complete solution for facility management and campus services.
               </p>
               
               {/* Contact Info */}
+=======
+                Empowering campus management with cutting-edge technology and seamless operations.
+              </p>
+              
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
               <div className="space-y-3">
                 <div className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors duration-300">
                   <MapPinIcon className="h-5 w-5 text-orange-500" />
@@ -102,7 +119,10 @@ const Footer = () => {
               </div>
             </div>
 
+<<<<<<< HEAD
             {/* Links Sections */}
+=======
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
             <div className="space-y-8">
               <div>
                 <h4 className="text-lg font-semibold text-white mb-4 flex items-center">
@@ -112,10 +132,14 @@ const Footer = () => {
                 <ul className="space-y-2">
                   {footerLinks.campus.map((link) => (
                     <li key={link.name}>
+<<<<<<< HEAD
                       <a
                         href={link.href}
                         className="text-gray-300 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group"
                       >
+=======
+                      <a href={link.href} className="text-gray-300 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group">
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
                         <SparklesIcon className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         {link.name}
                       </a>
@@ -134,10 +158,14 @@ const Footer = () => {
                 <ul className="space-y-2">
                   {footerLinks.services.map((link) => (
                     <li key={link.name}>
+<<<<<<< HEAD
                       <a
                         href={link.href}
                         className="text-gray-300 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group"
                       >
+=======
+                      <a href={link.href} className="text-gray-300 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group">
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
                         <SparklesIcon className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         {link.name}
                       </a>
@@ -156,10 +184,14 @@ const Footer = () => {
                 <ul className="space-y-2">
                   {footerLinks.resources.map((link) => (
                     <li key={link.name}>
+<<<<<<< HEAD
                       <a
                         href={link.href}
                         className="text-gray-300 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group"
                       >
+=======
+                      <a href={link.href} className="text-gray-300 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group">
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
                         <SparklesIcon className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         {link.name}
                       </a>
@@ -170,17 +202,25 @@ const Footer = () => {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* Bottom Section */}
           <div className="border-t border-gray-700 pt-8">
             <div className="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
               {/* Copyright */}
+=======
+          <div className="border-t border-gray-700 pt-8">
+            <div className="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
               <div className="flex items-center space-x-2 text-gray-400 text-sm">
                 <span>© {currentYear} Smart Campus Operations Hub</span>
                 <HeartIcon className="h-4 w-4 text-red-500 animate-pulse" />
                 <span>Built with passion for education</span>
               </div>
 
+<<<<<<< HEAD
               {/* Social Links */}
+=======
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
               <div className="flex items-center space-x-6">
                 {socialLinks.map((social) => (
                   <a
@@ -196,6 +236,7 @@ const Footer = () => {
                 ))}
               </div>
 
+<<<<<<< HEAD
               {/* Legal Links */}
               <div className="flex items-center space-x-6 text-sm">
                 {footerLinks.legal.map((link) => (
@@ -204,6 +245,11 @@ const Footer = () => {
                     href={link.href}
                     className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
                   >
+=======
+              <div className="flex items-center space-x-6 text-sm">
+                {footerLinks.legal.map((link) => (
+                  <a key={link.name} href={link.href} className="text-gray-400 hover:text-orange-400 transition-colors duration-300">
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
                     {link.name}
                   </a>
                 ))}
@@ -212,11 +258,15 @@ const Footer = () => {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Decorative Bottom Border */}
         <div className="h-2 bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500"></div>
         
         {/* Animated Pattern */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50"></div>
+=======
+        <div className="h-2 bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500"></div>
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
       </div>
     </footer>
   );

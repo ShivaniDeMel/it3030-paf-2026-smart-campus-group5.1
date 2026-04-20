@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\model\User.java
 C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\service\FacilityService.java
 C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\config\MongoConfig.java
@@ -24,3 +25,16 @@ C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\sr
 C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\exception\ResourceNotFoundException.java
 C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\model\Booking.java
 C:\Users\kavee\OneDrive\Desktop\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\controller\CourseController.java
+=======
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\BackendApplication.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\config\SecurityConfig.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\controller\BookingController.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\dto\BookingRequestDTO.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\dto\BookingResponseDTO.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\exception\GlobalExceptionHandler.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\model\Booking.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\model\BookingStatus.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\repository\BookingRepository.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\service\BookingService.java
+C:\Users\Admin\Downloads\paf\it3030-paf-2026-smart-campus-group5.1\backend\src\main\java\com\smartcampus\backend\service\BookingServiceImpl.java
+>>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
