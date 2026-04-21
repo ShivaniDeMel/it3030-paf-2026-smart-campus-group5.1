@@ -147,10 +147,10 @@ public class FacilityService {
         long total = allFacilities.size();
         
         // Count by status using stream instead of separate database calls
-        long active = allFacilities.stream().mapToLong(f -> "active".equals(f.getStatus()) ? 1 : 0).sum();
-        long maintenance = allFacilities.stream().mapToLong(f -> "maintenance".equals(f.getStatus()) ? 1 : 0).sum();
-        long outOfService = allFacilities.stream().mapToLong(f -> "out_of_service".equals(f.getStatus()) ? 1 : 0).sum();
-        long underReview = allFacilities.stream().mapToLong(f -> "under_review".equals(f.getStatus()) ? 1 : 0).sum();
+        long active = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("active") ? 1 : 0).sum();
+        long maintenance = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("maintenance") ? 1 : 0).sum();
+        long outOfService = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("out_of_service") ? 1 : 0).sum();
+        long underReview = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("under_review") ? 1 : 0).sum();
         
         // Count by facility type (case-insensitive matching)
         long lectureHall = allFacilities.stream().mapToLong(f -> f.getType() != null && f.getType().toLowerCase().contains("lecture") ? 1 : 0).sum();
