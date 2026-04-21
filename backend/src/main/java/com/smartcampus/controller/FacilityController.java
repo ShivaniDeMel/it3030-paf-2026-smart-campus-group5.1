@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
+import jakarta.annotation.Nonnull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +31,7 @@ public class FacilityController {
 
     // Get facility by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Facility> getFacilityById(@NonNull @PathVariable String id) {
+    public ResponseEntity<Facility> getFacilityById(@Nonnull @PathVariable String id) {
         Facility facility = facilityService.getFacilityById(id);
         return ResponseEntity.ok(facility);
     }
@@ -71,7 +71,7 @@ public class FacilityController {
 
     // Update facility
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Facility> updateFacility(@NonNull @PathVariable String id,
+    public ResponseEntity<Facility> updateFacility(@Nonnull @PathVariable String id,
                                                    @RequestParam Map<String, String> facilityData,
                                                    @RequestParam(required = false) MultipartFile image) {
         // Get existing facility
@@ -106,7 +106,7 @@ public class FacilityController {
 
     // Delete facility
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFacility(@NonNull @PathVariable String id) {
+    public ResponseEntity<Void> deleteFacility(@Nonnull @PathVariable String id) {
         facilityService.deleteFacility(id);
         return ResponseEntity.noContent().build();
     }
@@ -120,14 +120,14 @@ public class FacilityController {
 
     // Get facilities by type
     @GetMapping("/type/{type}")
-    public ResponseEntity<List<Facility>> getFacilitiesByType(@NonNull @PathVariable String type) {
+    public ResponseEntity<List<Facility>> getFacilitiesByType(@Nonnull @PathVariable String type) {
         List<Facility> facilities = facilityService.getFacilitiesByType(type);
         return ResponseEntity.ok(facilities);
     }
 
     // Get facilities by status
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<Facility>> getFacilitiesByStatus(@NonNull @PathVariable String status) {
+    public ResponseEntity<List<Facility>> getFacilitiesByStatus(@Nonnull @PathVariable String status) {
         List<Facility> facilities = facilityService.getFacilitiesByStatus(status);
         return ResponseEntity.ok(facilities);
     }

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class UserController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable @NonNull String id) {
+    public ResponseEntity<?> getUserById(@PathVariable @Nonnull String id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
@@ -41,7 +41,7 @@ public class UserController {
     }
     
     @GetMapping("/username/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable @NonNull String username) {
+    public ResponseEntity<?> getUserByUsername(@PathVariable @Nonnull String username) {
         Optional<User> user = userService.getUserByUsername(username);
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
@@ -50,13 +50,13 @@ public class UserController {
     }
     
     @GetMapping("/role/{role}")
-    public ResponseEntity<List<User>> getUsersByRole(@PathVariable @NonNull String role) {
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable @Nonnull String role) {
         List<User> users = userService.getUsersByRole(role);
         return ResponseEntity.ok(users);
     }
     
     @GetMapping("/department/{department}")
-    public ResponseEntity<List<User>> getUsersByDepartment(@PathVariable @NonNull String department) {
+    public ResponseEntity<List<User>> getUsersByDepartment(@PathVariable @Nonnull String department) {
         List<User> users = userService.getUsersByDepartment(department);
         return ResponseEntity.ok(users);
     }
@@ -74,7 +74,7 @@ public class UserController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable @NonNull String id, @Valid @RequestBody @NonNull User userDetails) {
+    public ResponseEntity<?> updateUser(@PathVariable @Nonnull String id, @Valid @RequestBody @Nonnull User userDetails) {
         try {
             User updatedUser = userService.updateUser(id, userDetails);
             return ResponseEntity.ok(updatedUser);
@@ -86,7 +86,7 @@ public class UserController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable @NonNull String id) {
+    public ResponseEntity<?> deleteUser(@PathVariable @Nonnull String id) {
         try {
             userService.deleteUser(id);
             Map<String, String> response = new HashMap<>();
@@ -100,7 +100,7 @@ public class UserController {
     }
     
     @PostMapping("/{userId}/enroll/{courseId}")
-    public ResponseEntity<?> enrollCourse(@PathVariable @NonNull String userId, @PathVariable @NonNull String courseId) {
+    public ResponseEntity<?> enrollCourse(@PathVariable @Nonnull String userId, @PathVariable @Nonnull String courseId) {
         try {
             userService.enrollCourse(userId, courseId);
             Map<String, String> response = new HashMap<>();
@@ -114,7 +114,7 @@ public class UserController {
     }
     
     @DeleteMapping("/{userId}/drop/{courseId}")
-    public ResponseEntity<?> dropCourse(@PathVariable @NonNull String userId, @PathVariable @NonNull String courseId) {
+    public ResponseEntity<?> dropCourse(@PathVariable @Nonnull String userId, @PathVariable @Nonnull String courseId) {
         try {
             userService.dropCourse(userId, courseId);
             Map<String, String> response = new HashMap<>();
