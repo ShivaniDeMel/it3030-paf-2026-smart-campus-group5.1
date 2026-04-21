@@ -148,15 +148,15 @@ vite.config.ts.timestamp-*
 *.rar
 hs_err_pid*
 target/
-.mvn/
-mvnw
-mvnw.cmd
+# .mvn/
+# mvnw
+# mvnw.cmd
 
 # Spring Boot application properties with sensitive data
-**/application.properties
-**/application-*.properties
-**/application.yml
-**/application-*.yml
+# **/application.properties
+# **/application-*.properties
+# **/application.yml
+# **/application-*.yml
 !**/application.properties.example
 !**/application.yml.example
 

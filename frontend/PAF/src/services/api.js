@@ -32,7 +32,19 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+    let errorMessage = 'API Error occurred';
+    
+    if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Request timeout - please try again';
+    } else if (error.response) {
+      errorMessage = `Server error: ${error.response.status} - ${error.response.data?.message || error.response.statusText}`;
+    } else if (error.request) {
+      errorMessage = 'Network error - please check your connection';
+    } else {
+      errorMessage = error.message;
+    }
+    
+    console.error('API Error:', errorMessage);
     return Promise.reject(error);
   }
 );
@@ -82,7 +94,7 @@ export const facilityAPI = {
   getFacilitiesByStatus: (status) => api.get(`/facilities/status/${status}`),
   
   // Get facility statistics
-  getFacilityStatistics: () => api.get('/facilities/statistics', { timeout: 3000 }),
+  getFacilityStatistics: () => api.get('/facilities/statistics', { timeout: 10000 }),
   
   // Get facility types
   getFacilityTypes: () => api.get('/facilities/types'),
