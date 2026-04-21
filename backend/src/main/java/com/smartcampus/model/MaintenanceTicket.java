@@ -1,4 +1,4 @@
-package com.smartcampus.backend.model;
+package com.smartcampus.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

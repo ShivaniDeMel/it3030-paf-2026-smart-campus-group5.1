@@ -1,6 +1,6 @@
-package com.smartcampus.backend.repository;
+package com.smartcampus.repository;
 
-import com.smartcampus.backend.model.MaintenanceTicket;
+import com.smartcampus.model.MaintenanceTicket;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

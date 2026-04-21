@@ -1,6 +1,6 @@
-package com.smartcampus.backend.service;
+package com.smartcampus.service;
 
-import com.smartcampus.backend.model.AttachmentMetadata;
+import com.smartcampus.model.AttachmentMetadata;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

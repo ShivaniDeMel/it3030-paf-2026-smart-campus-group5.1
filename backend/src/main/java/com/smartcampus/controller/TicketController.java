@@ -1,8 +1,8 @@
-package com.smartcampus.backend.controller;
+package com.smartcampus.controller;
 
-import com.smartcampus.backend.model.*;
-import com.smartcampus.backend.repository.TicketRepository;
-import com.smartcampus.backend.service.FileStorageService;
+import com.smartcampus.model.*;
+import com.smartcampus.repository.TicketRepository;
+import com.smartcampus.service.FileStorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
