@@ -1,6 +1,6 @@
-import { Link, useLocation } from 'react-router-dom'
-import { useState } from 'react'
-import { useAuth } from '../contexts/AuthContext'
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import {
   BuildingOfficeIcon,
   ChartBarIcon,
@@ -10,29 +10,33 @@ import {
   QrCodeIcon,
   ShieldCheckIcon,
   BellIcon,
-  ArrowRightOnRectangleIcon
-} from '@heroicons/react/24/outline'
+  ArrowRightOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 
 const Navbar = () => {
-  const location = useLocation()
-  const { user, isAuthenticated, logout, loading } = useAuth()
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
+  const location = useLocation();
+  const { user, isAuthenticated, logout, loading } = useAuth();
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const navigation = [
-    { name: 'Home', href: '/', icon: SparklesIcon },
-    { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon },
-    { name: 'Notifications', href: '/notifications', icon: BellIcon },
-    { name: 'Facilities', href: '/facilities', icon: BuildingOfficeIcon },
-    { name: 'Booking Workflow', href: '/booking-workflow', icon: QrCodeIcon },
-    { name: 'Role Management', href: '/role-management', icon: ShieldCheckIcon }
-  ]
+    { name: "Home", href: "/", icon: SparklesIcon },
+    { name: "Dashboard", href: "/dashboard", icon: ChartBarIcon },
+    { name: "Notifications", href: "/notifications", icon: BellIcon },
+    { name: "Facilities", href: "/facilities", icon: BuildingOfficeIcon },
+    { name: "Booking Workflow", href: "/booking-workflow", icon: QrCodeIcon },
+    {
+      name: "Role Management",
+      href: "/role-management",
+      icon: ShieldCheckIcon,
+    },
+  ];
 
   const isActive = (path) => {
-    if (path === '/') {
-      return location.pathname === '/'
+    if (path === "/") {
+      return location.pathname === "/";
     }
-    return location.pathname.startsWith(path)
-  }
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <nav className="relative">
@@ -61,15 +65,15 @@ const Navbar = () => {
 
             <div className="hidden lg:flex items-center space-x-2">
               {navigation.map((item, index) => {
-                const Icon = item.icon
+                const Icon = item.icon;
                 return (
                   <Link
                     key={item.name}
                     to={item.href}
                     className={`group relative px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${
                       isActive(item.href)
-                        ? 'bg-white/20 text-white shadow-lg'
-                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                        ? "bg-white/20 text-white shadow-lg"
+                        : "text-white/80 hover:text-white hover:bg-white/10"
                     }`}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
@@ -84,7 +88,7 @@ const Navbar = () => {
 
                     <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </Link>
-                )
+                );
               })}
             </div>
 
@@ -101,14 +105,18 @@ const Navbar = () => {
                   <div className="relative">
                     <button
                       type="button"
-                      onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                      onClick={() =>
+                        setShowProfileDropdown(!showProfileDropdown)
+                      }
                       className="flex items-center space-x-3 hover:bg-white/10 rounded-xl p-2 transition-all duration-300"
                     >
                       <div className="text-right hidden sm:block">
                         <p className="text-sm font-medium text-white">
                           {user?.firstName} {user?.lastName}
                         </p>
-                        <p className="text-xs text-white/80 capitalize">{user?.role}</p>
+                        <p className="text-xs text-white/80 capitalize">
+                          {user?.role}
+                        </p>
                       </div>
                       <div className="relative group">
                         <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -133,8 +141,8 @@ const Navbar = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            logout()
-                            setShowProfileDropdown(false)
+                            logout();
+                            setShowProfileDropdown(false);
                           }}
                           className="w-full px-4 py-3 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-secondary-700 transition-colors duration-200 flex items-center space-x-2"
                         >
@@ -168,7 +176,7 @@ const Navbar = () => {
         <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-50" />
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

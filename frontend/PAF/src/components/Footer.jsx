@@ -8,20 +8,20 @@ import {
   FireIcon,
   HeartIcon,
   AcademicCapIcon,
-  UserGroupIcon
-} from '@heroicons/react/24/outline'
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   const footerLinks = {
-    campus: ['About Us', 'Facilities', 'Departments', 'Campus Map'],
-    services: ['IT Support', 'Facility Booking', 'Maintenance', 'Emergency'],
-    resources: ['Student Portal', 'Library', 'Cafeteria', 'Transportation'],
-    legal: ['Privacy Policy', 'Terms of Service', 'Accessibility', 'Contact']
-  }
+    campus: ["About Us", "Facilities", "Departments", "Campus Map"],
+    services: ["IT Support", "Facility Booking", "Maintenance", "Emergency"],
+    resources: ["Student Portal", "Library", "Cafeteria", "Transportation"],
+    legal: ["Privacy Policy", "Terms of Service", "Accessibility", "Contact"],
+  };
 
-  const socialLinks = ['Facebook', 'Twitter', 'LinkedIn', 'Instagram']
+  const socialLinks = ["Facebook", "Twitter", "LinkedIn", "Instagram"];
 
   return (
     <footer className="footer">
@@ -44,29 +44,47 @@ const Footer = () => {
             </p>
 
             <div className="footer__contact">
-              <span><MapPinIcon /> SLIIT Campus, Malabe</span>
-              <span><PhoneIcon /> 012 3456789</span>
-              <span><EnvelopeIcon /> info@smartcampus.edu</span>
-              <span><ClockIcon /> 24/7 Support Available</span>
+              <span>
+                <MapPinIcon /> SLIIT Campus, Malabe
+              </span>
+              <span>
+                <PhoneIcon /> 012 3456789
+              </span>
+              <span>
+                <EnvelopeIcon /> info@smartcampus.edu
+              </span>
+              <span>
+                <ClockIcon /> 24/7 Support Available
+              </span>
             </div>
           </div>
 
           <div className="footer__links">
-            <h4><AcademicCapIcon /> Campus</h4>
+            <h4>
+              <AcademicCapIcon /> Campus
+            </h4>
             {footerLinks.campus.map((item) => (
-              <a key={item} href="#">{item}</a>
+              <a key={item} href="#">
+                {item}
+              </a>
             ))}
           </div>
 
           <div className="footer__links">
-            <h4><BuildingOfficeIcon /> Services</h4>
+            <h4>
+              <BuildingOfficeIcon /> Services
+            </h4>
             {footerLinks.services.map((item) => (
-              <a key={item} href="#">{item}</a>
+              <a key={item} href="#">
+                {item}
+              </a>
             ))}
           </div>
 
           <div className="footer__links">
-            <h4><UserGroupIcon /> Resources</h4>
+            <h4>
+              <UserGroupIcon /> Resources
+            </h4>
             {footerLinks.resources.map((item) => (
               <a key={item} href="#">
                 <SparklesIcon />
@@ -93,13 +111,15 @@ const Footer = () => {
 
           <div className="footer__legal">
             {footerLinks.legal.map((item) => (
-              <a key={item} href="#">{item}</a>
+              <a key={item} href="#">
+                {item}
+              </a>
             ))}
           </div>
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
