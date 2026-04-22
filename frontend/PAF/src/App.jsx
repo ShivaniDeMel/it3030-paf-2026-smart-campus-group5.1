@@ -1,28 +1,50 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
-import UserBookings from './pages/UserBookings';
-import AdminBookings from './pages/AdminBookings';
+import RegisterPage from './pages/RegisterPage';
+import Dashboard from './pages/Dashboard';
+import FacilitiesCatalogue from './pages/FacilitiesCatalogue';
+import FacilityDetails from './pages/FacilityDetails';
+import AddFacility from './pages/AddFacility';
+import EditFacility from './pages/EditFacility';
+import BookingWorkflow from './pages/BookingWorkflow';
+import MyBookings from './pages/MyBookings';
+import BookingDetails from './pages/BookingDetails';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <Navbar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<UserBookings />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/bookings" element={<UserBookings />} />
-            <Route path="/admin/bookings" element={<AdminBookings />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen bg-gray-50">
+          <div className="bg-white text-gray-900 min-h-screen flex flex-col">
+            <Navbar />
+            
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/facilities" element={<FacilitiesCatalogue />} />
+                <Route path="/facilities/add" element={<AddFacility />} />
+                <Route path="/facilities/edit/:id" element={<EditFacility />} />
+                <Route path="/facilities/:id" element={<FacilityDetails />} />
+                <Route path="/my-bookings" element={<MyBookings />} />
+                <Route path="/booking-workflow/:id" element={<BookingWorkflow />} />
+                <Route path="/booking-workflow" element={<BookingWorkflow />} />
+                <Route path="/booking-details" element={<BookingDetails />} />
+              </Routes>
+            </main>
+            
+            <Footer />
+          </div>
+        </div>
+      </AuthProvider>
     </Router>
   );
 }
 
 export default App;
-

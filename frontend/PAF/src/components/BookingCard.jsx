@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import QRCode from 'qrcode';
 import {
   CalendarDaysIcon,
   ClockIcon,
@@ -6,25 +8,21 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   ExclamationTriangleIcon,
+  QrCodeIcon,
 } from '@heroicons/react/24/outline';
 
 const STATUS_STYLES = {
-  PENDING: {
+  pending: {
     bg: 'bg-yellow-100 text-yellow-800 border-yellow-300',
     icon: ExclamationTriangleIcon,
     label: 'Pending',
   },
-  APPROVED: {
+  confirmed: {
     bg: 'bg-green-100 text-green-800 border-green-300',
     icon: CheckCircleIcon,
-    label: 'Approved',
+    label: 'Confirmed',
   },
-  REJECTED: {
-    bg: 'bg-red-100 text-red-800 border-red-300',
-    icon: XCircleIcon,
-    label: 'Rejected',
-  },
-  CANCELLED: {
+  cancelled: {
     bg: 'bg-gray-100 text-gray-800 border-gray-300',
     icon: XCircleIcon,
     label: 'Cancelled',
@@ -32,8 +30,18 @@ const STATUS_STYLES = {
 };
 
 const BookingCard = ({ booking, onCancel, onApprove, onReject, isAdmin = false }) => {
-  const statusConfig = STATUS_STYLES[booking.status] || STATUS_STYLES.PENDING;
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [showQR, setShowQR] = useState(false);
+  const statusConfig = STATUS_STYLES[booking.status] || STATUS_STYLES.pending;
   const StatusIcon = statusConfig.icon;
+
+  useEffect(() => {
+    if (booking.id) {
+      QRCode.toDataURL(booking.id, { width: 128, margin: 1 })
+        .then(url => setQrCodeUrl(url))
+        .catch(err => console.error('QR Code generation failed:', err));
+    }
+  }, [booking.id]);
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
@@ -80,7 +88,25 @@ const BookingCard = ({ booking, onCancel, onApprove, onReject, isAdmin = false }
 
       {/* Actions */}
       <div className="px-5 pb-5 flex gap-2">
-        {isAdmin && booking.status === 'PENDING' && (
+        {/* QR Code Section */}
+        {qrCodeUrl && (
+          <div className="w-full mb-3">
+            <button
+              onClick={() => setShowQR(!showQR)}
+              className="w-full py-2 px-4 bg-blue-500 text-white text-sm font-medium rounded-xl hover:bg-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <QrCodeIcon className="h-4 w-4" />
+              {showQR ? 'Hide QR Code' : 'Show QR Code'}
+            </button>
+            {showQR && (
+              <div className="mt-3 flex justify-center">
+                <img src={qrCodeUrl} alt="Booking QR Code" className="w-24 h-24 border-2 border-gray-200 rounded-lg" />
+              </div>
+            )}
+          </div>
+        )}
+
+        {isAdmin && booking.status === 'pending' && (
           <>
             <button
               onClick={() => onApprove(booking.id)}
@@ -99,7 +125,7 @@ const BookingCard = ({ booking, onCancel, onApprove, onReject, isAdmin = false }
           </>
         )}
 
-        {!isAdmin && booking.status === 'PENDING' && (
+        {!isAdmin && booking.status === 'pending' && (
           <button
             onClick={() => onCancel(booking.id)}
             className="flex-1 py-2 px-4 bg-gray-500 text-white text-sm font-medium rounded-xl hover:bg-gray-600 transition-all duration-300 flex items-center justify-center gap-1"

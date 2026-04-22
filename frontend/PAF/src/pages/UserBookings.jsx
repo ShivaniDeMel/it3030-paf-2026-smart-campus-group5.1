@@ -47,7 +47,7 @@ const UserBookings = () => {
 
   const handleCancelBooking = async (id) => {
     try {
-      await bookingService.updateBookingStatus(id, 'CANCELLED');
+      await bookingService.cancelBooking(id, 'Cancelled by user');
       fetchBookings();
     } catch (error) {
       console.error('Failed to cancel booking:', error);
@@ -59,9 +59,9 @@ const UserBookings = () => {
 
   const statusCounts = {
     ALL: bookings.length,
-    PENDING: bookings.filter((b) => b.status === 'PENDING').length,
-    APPROVED: bookings.filter((b) => b.status === 'APPROVED').length,
-    REJECTED: bookings.filter((b) => b.status === 'REJECTED').length,
+    pending: bookings.filter((b) => b.status === 'pending').length,
+    confirmed: bookings.filter((b) => b.status === 'confirmed').length,
+    cancelled: bookings.filter((b) => b.status === 'cancelled').length,
   };
 
   return (
@@ -75,7 +75,7 @@ const UserBookings = () => {
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
           >
             {showForm ? (
               <>

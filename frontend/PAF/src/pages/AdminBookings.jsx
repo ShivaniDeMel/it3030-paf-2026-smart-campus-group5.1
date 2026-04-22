@@ -29,7 +29,7 @@ const AdminBookings = () => {
 
   const handleApprove = async (id) => {
     try {
-      await bookingService.updateBookingStatus(id, 'APPROVED');
+      await bookingService.approveBooking(id, 'Approved by admin');
       fetchBookings();
     } catch (error) {
       console.error('Failed to approve booking:', error);
@@ -38,7 +38,7 @@ const AdminBookings = () => {
 
   const handleReject = async (id) => {
     try {
-      await bookingService.updateBookingStatus(id, 'REJECTED');
+      await bookingService.cancelBooking(id, 'Rejected by admin');
       fetchBookings();
     } catch (error) {
       console.error('Failed to reject booking:', error);
@@ -50,10 +50,9 @@ const AdminBookings = () => {
 
   const statusCounts = {
     ALL: bookings.length,
-    PENDING: bookings.filter((b) => b.status === 'PENDING').length,
-    APPROVED: bookings.filter((b) => b.status === 'APPROVED').length,
-    REJECTED: bookings.filter((b) => b.status === 'REJECTED').length,
-    CANCELLED: bookings.filter((b) => b.status === 'CANCELLED').length,
+    pending: bookings.filter((b) => b.status === 'pending').length,
+    confirmed: bookings.filter((b) => b.status === 'confirmed').length,
+    cancelled: bookings.filter((b) => b.status === 'cancelled').length,
   };
 
   return (
@@ -75,13 +74,12 @@ const AdminBookings = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             { label: 'Total', count: statusCounts.ALL, color: 'bg-orange-500' },
-            { label: 'Pending', count: statusCounts.PENDING, color: 'bg-yellow-500' },
-            { label: 'Approved', count: statusCounts.APPROVED, color: 'bg-green-500' },
-            { label: 'Rejected', count: statusCounts.REJECTED, color: 'bg-red-500' },
-            { label: 'Cancelled', count: statusCounts.CANCELLED, color: 'bg-gray-500' },
+            { label: 'Pending', count: statusCounts.pending, color: 'bg-yellow-500' },
+            { label: 'Confirmed', count: statusCounts.confirmed, color: 'bg-green-500' },
+            { label: 'Cancelled', count: statusCounts.cancelled, color: 'bg-gray-500' },
           ].map(({ label, count, color }) => (
             <div key={label} className="bg-white rounded-xl shadow-md p-4 text-center border border-gray-100">
               <div className={`inline-block w-3 h-3 rounded-full ${color} mb-2`}></div>
