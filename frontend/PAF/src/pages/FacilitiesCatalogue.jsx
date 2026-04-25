@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { facilityAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -17,6 +18,8 @@ import {
 } from '@heroicons/react/24/outline';
 
 const FacilitiesCatalogue = () => {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
   const [facilities, setFacilities] = useState([]);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -176,22 +179,24 @@ const FacilitiesCatalogue = () => {
         </div>
         
         {/* Add Facility Button - Better Location */}
-        <div className="flex justify-center mb-8">
-          <Link
-            to="/facilities/add"
-            className="group relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-4 rounded-2xl font-bold text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-500 border-2 border-orange-400/50 hover:border-orange-400"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute -inset-1 bg-gradient-to-r from-orange-400/20 to-orange-600/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <span className="relative z-10 flex items-center gap-3">
-              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-lg animate-pulse">
-                <PlusCircleIcon className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-lg">Add New Facility</span>
-              <ArrowRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </span>
-          </Link>
-        </div>
+        {isAdmin && (
+          <div className="flex justify-center mb-8">
+            <Link
+              to="/facilities/add"
+              className="group relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-4 rounded-2xl font-bold text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-500 border-2 border-orange-400/50 hover:border-orange-400"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-400/20 to-orange-600/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <span className="relative z-10 flex items-center gap-3">
+                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-lg animate-pulse">
+                  <PlusCircleIcon className="h-6 w-6 text-white" />
+                </div>
+                <span className="text-lg">Add New Facility</span>
+                <ArrowRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
+            </Link>
+          </div>
+        )}
       
         {/* Search and Filters */}
         <div className="bg-gradient-to-br from-black via-orange-900/50 to-black backdrop-blur-md rounded-2xl shadow-2xl border border-orange-700/50 p-6 mb-8 animate-slide-in" style={{ animationDelay: '0.5s' }}>

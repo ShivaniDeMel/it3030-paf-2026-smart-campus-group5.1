@@ -47,7 +47,7 @@ public class BookingService {
         Facility facility = facilityRepository.findById(facilityId)
                 .orElseThrow(() -> new ResourceNotFoundException("Facility not found with id: " + facilityId));
 
-        if (!"active".equals(facility.getStatus())) {
+        if (facility.getStatus() == null || !"active".equalsIgnoreCase(facility.getStatus())) {
             throw new BusinessException("Facility is not available for booking");
         }
 
@@ -143,6 +143,23 @@ public class BookingService {
         booking.setApprovalNotes(notes);
         booking.setApprovedBy(approvedBy);
         booking.setApprovedAt(LocalDateTime.now());
+        booking.setUpdatedAt(LocalDateTime.now());
+
+        return bookingRepository.save(booking);
+    }
+
+    // Reject booking with reason (admin flow)
+    public Booking rejectBooking(@Nonnull String id, String reason, String rejectedBy) {
+        Booking booking = getBookingById(id);
+
+        if (!"pending".equals(booking.getStatus())) {
+            throw new BusinessException("Only pending bookings can be rejected");
+        }
+
+        booking.setStatus("cancelled");
+        booking.setCancellationReason(reason);
+        booking.setCancelledBy(rejectedBy);
+        booking.setCancelledAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());
 
         return bookingRepository.save(booking);

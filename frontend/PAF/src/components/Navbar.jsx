@@ -8,8 +8,11 @@ import {
   SparklesIcon,
   ChevronDownIcon,
   QrCodeIcon,
+  WrenchScrewdriverIcon,
+  ClipboardDocumentListIcon,
   ShieldCheckIcon,
   BellIcon,
+  UserCircleIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 
@@ -18,17 +21,26 @@ const Navbar = () => {
   const { user, isAuthenticated, logout, loading } = useAuth();
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
+  const role = (user?.role || "USER").toString().toUpperCase();
+  const isAdmin = role === "ADMIN";
+
   const navigation = [
     { name: "Home", href: "/", icon: SparklesIcon },
     { name: "Dashboard", href: "/dashboard", icon: ChartBarIcon },
-    { name: "Notifications", href: "/notifications", icon: BellIcon },
     { name: "Facilities", href: "/facilities", icon: BuildingOfficeIcon },
-    { name: "Booking Workflow", href: "/booking-workflow", icon: QrCodeIcon },
-    {
-      name: "Role Management",
-      href: "/role-management",
-      icon: ShieldCheckIcon,
-    },
+    { name: "Ticketing", href: "/tickets", icon: WrenchScrewdriverIcon },
+    ...(isAdmin ? [{ name: "Booking Workflow", href: "/booking-workflow", icon: QrCodeIcon }] : []),
+    { name: "My Bookings", href: "/my-bookings", icon: ClipboardDocumentListIcon },
+    ...(isAdmin
+      ? [
+          {
+            name: "Role Management",
+            href: "/role-management",
+            icon: ShieldCheckIcon,
+          },
+        ]
+      : []),
+    { name: "Notifications", href: "/notifications", icon: BellIcon, iconOnly: true },
   ];
 
   const isActive = (path) => {
@@ -39,11 +51,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 animate-gradient" />
-      <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
+    <nav className="relative z-[1000] overflow-visible border-b border-orange-700/40 shadow-[0_8px_30px_-12px_rgba(249,115,22,0.35)]">
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-orange-900 to-black animate-gradient" />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
 
-      <div className="relative z-10">
+      <div className="relative z-10 overflow-visible">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center space-x-4">
@@ -70,16 +82,20 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`group relative px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${
+                    className={`group relative rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${
+                      item.iconOnly ? "p-3" : "px-6 py-3"
+                    } ${
                       isActive(item.href)
                         ? "bg-white/20 text-white shadow-lg"
                         : "text-white/80 hover:text-white hover:bg-white/10"
                     }`}
                     style={{ animationDelay: `${index * 0.1}s` }}
+                    aria-label={item.name}
+                    title={item.name}
                   >
                     <div className="flex items-center space-x-2">
                       <Icon className="h-5 w-5" />
-                      <span>{item.name}</span>
+                      {!item.iconOnly && <span>{item.name}</span>}
                     </div>
 
                     {isActive(item.href) && (
@@ -95,14 +111,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               {!loading && isAuthenticated ? (
                 <div className="flex items-center space-x-4">
-                  <Link
-                    to="/notifications"
-                    className="rounded-xl p-2 text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-white"
-                    aria-label="Notifications"
-                  >
-                    <BellIcon className="h-6 w-6" />
-                  </Link>
-                  <div className="relative">
+                  <div className="relative overflow-visible">
                     <button
                       type="button"
                       onClick={() =>
@@ -129,22 +138,32 @@ const Navbar = () => {
                     </button>
 
                     {showProfileDropdown && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-xl border border-gray-200 dark:border-secondary-600 overflow-hidden z-50">
-                        <div className="p-4 border-b border-gray-200 dark:border-secondary-600">
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <div className="absolute right-0 mt-2 w-56 rounded-xl overflow-hidden z-[1100] border border-orange-700/50 shadow-2xl bg-gradient-to-br from-black via-orange-950 to-black backdrop-blur-md">
+                        <div className="p-4 border-b border-orange-700/40">
+                          <p className="text-sm font-semibold text-white">
                             {user?.firstName} {user?.lastName}
                           </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                          <p className="text-xs text-orange-300 capitalize">
                             {user?.role}
                           </p>
                         </div>
+                        <Link
+                          to="/profile"
+                          onClick={() => {
+                            setShowProfileDropdown(false);
+                          }}
+                          className="w-full px-4 py-3 text-left text-sm text-orange-100 hover:bg-orange-500/20 hover:text-white transition-colors duration-200 flex items-center space-x-2"
+                        >
+                          <UserCircleIcon className="h-4 w-4" />
+                          <span>My Profile</span>
+                        </Link>
                         <button
                           type="button"
                           onClick={() => {
                             logout();
                             setShowProfileDropdown(false);
                           }}
-                          className="w-full px-4 py-3 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-secondary-700 transition-colors duration-200 flex items-center space-x-2"
+                          className="w-full px-4 py-3 text-left text-sm text-orange-100 hover:bg-orange-500/20 hover:text-white transition-colors duration-200 flex items-center space-x-2"
                         >
                           <ArrowRightOnRectangleIcon className="h-4 w-4" />
                           <span>Logout</span>

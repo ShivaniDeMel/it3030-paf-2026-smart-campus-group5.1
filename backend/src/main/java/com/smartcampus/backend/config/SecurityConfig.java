@@ -32,8 +32,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 googleOAuthEnabled
-                                        ? new String[]{"/", "/error", "/auth/google", "/auth/status", "/auth/me", "/oauth2/**"}
-                                        : new String[]{"/", "/error", "/auth/google", "/auth/status", "/auth/me"}
+                                        ? new String[]{"/", "/error", "/auth/google", "/auth/status", "/auth/me", "/oauth2/**", "/api/**", "/courses/**", "/users/**"}
+                                        : new String[]{"/", "/error", "/auth/google", "/auth/status", "/auth/me", "/api/**", "/courses/**", "/users/**"}
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -50,7 +50,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 

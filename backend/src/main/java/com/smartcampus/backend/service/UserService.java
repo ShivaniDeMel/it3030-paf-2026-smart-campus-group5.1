@@ -62,4 +62,13 @@ public class UserService {
         user.setRole(UserRole.ADMIN);
         return userRepository.save(user);
     }
+
+    public User updateProfile(String email, String firstName, String lastName) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        return userRepository.save(user);
+    }
 }

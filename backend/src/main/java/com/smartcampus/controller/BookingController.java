@@ -15,15 +15,23 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class BookingController {
 
     @Autowired
     private BookingService bookingService;
 
+    private boolean isAdmin(String role) {
+        return role != null && "ADMIN".equalsIgnoreCase(role);
+    }
+
     // Get all bookings
     @GetMapping
-    public ResponseEntity<List<Booking>> getAllBookings() {
+    public ResponseEntity<List<Booking>> getAllBookings(
+            @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         List<Booking> bookings = bookingService.getAllBookings();
         return ResponseEntity.ok(bookings);
     }
@@ -72,11 +80,36 @@ public class BookingController {
     // Approve booking
     @PostMapping("/{id}/approve")
     public ResponseEntity<Booking> approveBooking(@Nonnull @PathVariable String id, 
-                                                   @RequestBody Map<String, String> request) {
+                                                   @RequestBody Map<String, String> request,
+                                                   @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         String approvedBy = "admin"; // In real app, get from authentication
         String notes = request.get("notes");
         Booking approvedBooking = bookingService.approveBooking(id, notes, approvedBy);
         return ResponseEntity.ok(approvedBooking);
+    }
+
+    // Approve booking (RESTful alias)
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<Booking> approveBookingPatch(@Nonnull @PathVariable String id,
+                                                        @RequestBody Map<String, String> request,
+                                                        @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        return approveBooking(id, request, role);
+    }
+
+    // Reject booking with reason
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<Booking> rejectBooking(@Nonnull @PathVariable String id,
+                                                 @RequestBody Map<String, String> request,
+                                                 @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        String reason = request.getOrDefault("reason", "Rejected by admin");
+        Booking rejectedBooking = bookingService.rejectBooking(id, reason, "admin");
+        return ResponseEntity.ok(rejectedBooking);
     }
 
     // Get bookings by user

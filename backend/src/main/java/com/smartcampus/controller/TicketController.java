@@ -1,5 +1,11 @@
 package com.smartcampus.controller;
 
+import com.smartcampus.backend.dto.CreateNotificationRequest;
+import com.smartcampus.backend.model.NotificationType;
+import com.smartcampus.backend.model.User;
+import com.smartcampus.backend.model.UserRole;
+import com.smartcampus.backend.repository.UserRepository;
+import com.smartcampus.backend.service.NotificationService;
 import com.smartcampus.model.*;
 import com.smartcampus.repository.TicketRepository;
 import com.smartcampus.service.FileStorageService;
@@ -18,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Map;
+import java.util.Comparator;
 
 @RestController
 @RequestMapping("/api/tickets")
@@ -25,10 +32,62 @@ public class TicketController {
 
     private final TicketRepository ticketRepository;
     private final FileStorageService fileStorageService;
+    private final UserRepository backendUserRepository;
+    private final NotificationService notificationService;
 
-    public TicketController(TicketRepository ticketRepository, FileStorageService fileStorageService) {
+    public TicketController(
+            TicketRepository ticketRepository,
+            FileStorageService fileStorageService,
+            UserRepository backendUserRepository,
+            NotificationService notificationService
+    ) {
         this.ticketRepository = ticketRepository;
         this.fileStorageService = fileStorageService;
+        this.backendUserRepository = backendUserRepository;
+        this.notificationService = notificationService;
+    }
+
+    private boolean isAdmin(String role) {
+        return role != null && "ADMIN".equalsIgnoreCase(role);
+    }
+
+    private boolean isAdminOrTechnician(String role) {
+        return role != null && ("ADMIN".equalsIgnoreCase(role) || "TECHNICIAN".equalsIgnoreCase(role));
+    }
+
+    private boolean isTechnician(String role) {
+        return role != null && "TECHNICIAN".equalsIgnoreCase(role);
+    }
+
+    private String resolveTechnicianId(String technicianIdentifier) {
+        if (technicianIdentifier == null || technicianIdentifier.isBlank()) {
+            return null;
+        }
+
+        String trimmed = technicianIdentifier.trim();
+        if (!trimmed.toUpperCase().startsWith("TN")) {
+            return trimmed;
+        }
+
+        try {
+            int index = Integer.parseInt(trimmed.substring(2));
+            List<User> technicians = backendUserRepository.findByRole(UserRole.TECHNICIAN).stream()
+                    .sorted(Comparator.comparing(user ->
+                            String.format(
+                                    "%s %s %s",
+                                    user.getFirstName() == null ? "" : user.getFirstName(),
+                                    user.getLastName() == null ? "" : user.getLastName(),
+                                    user.getEmail() == null ? "" : user.getEmail()
+                            )))
+                    .toList();
+
+            if (index < 1 || index > technicians.size()) {
+                return null;
+            }
+            return technicians.get(index - 1).getId();
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 
     // 1. POST /api/tickets - Create ticket (Multipart to handle 3 images)
@@ -96,17 +155,25 @@ public class TicketController {
             @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role,
             @RequestHeader(value = "X-User-Id", defaultValue = "anon") String userId) {
         
-        if ("ADMIN".equals(role) || "TECHNICIAN".equals(role)) {
+        if (isAdmin(role)) {
             return ResponseEntity.ok(ticketRepository.findAll());
+        } else if (isTechnician(role)) {
+            return ResponseEntity.ok(ticketRepository.findByAssignedTechnicianId(userId));
         } else {
-            // USER sees only their own tickets using reportedById
-            // Since we don't have a specific method in mongo repo without custom interface, 
-            // we will filter in memory, though normally we'd write findByReportedById in repo.
-            List<MaintenanceTicket> all = ticketRepository.findAll();
-            return ResponseEntity.ok(all.stream()
-                .filter(t -> userId.equals(t.getReportedById()))
-                .toList());
+            // USER sees only their own tickets
+            return ResponseEntity.ok(ticketRepository.findByReportedById(userId));
         }
+    }
+
+    // Technician queue endpoint - assigned tickets only
+    @GetMapping("/assigned")
+    public ResponseEntity<?> getAssignedTickets(
+            @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role,
+            @RequestHeader(value = "X-User-Id", defaultValue = "anon") String userId) {
+        if (!isTechnician(role) && !isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only technicians/admins can view assigned tickets.");
+        }
+        return ResponseEntity.ok(ticketRepository.findByAssignedTechnicianId(userId));
     }
 
     // 3. PUT /api/tickets/{id}/status - Update workflow status
@@ -117,7 +184,7 @@ public class TicketController {
             @RequestHeader(value = "X-User-Id", defaultValue = "anon") String userId,
             @RequestBody Map<String, String> payload) {
         
-        if (!"ADMIN".equals(role) && !"TECHNICIAN".equals(role)) {
+        if (!isAdminOrTechnician(role)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN or TECHNICIAN can update status.");
         }
 
@@ -128,6 +195,21 @@ public class TicketController {
         
         MaintenanceTicket ticket = ticketOpt.get();
         String statusStr = payload.get("status");
+
+        // Technician scope: only assigned tickets and limited transitions
+        if (isTechnician(role)) {
+            if (ticket.getAssignedTechnicianId() == null || !userId.equals(ticket.getAssignedTechnicianId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Technicians can only update tickets assigned to them.");
+            }
+            if (statusStr == null) {
+                return ResponseEntity.badRequest().body("Status is required.");
+            }
+            String normalized = statusStr.toUpperCase();
+            if (!"IN_PROGRESS".equals(normalized) && !"RESOLVED".equals(normalized)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Technicians can only set IN_PROGRESS or RESOLVED.");
+            }
+        }
+
         if (statusStr != null) {
             try {
                 ticket.setStatus(Status.valueOf(statusStr.toUpperCase()));
@@ -143,14 +225,135 @@ public class TicketController {
             ticket.setResolutionNotes(payload.get("resolutionNotes"));
         }
 
-        // Technically setting assigned tech here as well if they start progress
-        if ("IN_PROGRESS".equals(statusStr) && ticket.getAssignedTechnicianId() == null) {
+        // Self-assign only for non-technician staff path
+        if (!isTechnician(role) && "IN_PROGRESS".equalsIgnoreCase(statusStr) && ticket.getAssignedTechnicianId() == null) {
             ticket.setAssignedTechnicianId(userId); // Self-assign
         }
 
         ticket.setUpdatedAt(LocalDateTime.now());
         ticketRepository.save(ticket);
         
+        return ResponseEntity.ok(ticket);
+    }
+
+    // PATCH alias for status updates
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> updateTicketStatusPatch(
+            @PathVariable String id,
+            @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role,
+            @RequestHeader(value = "X-User-Id", defaultValue = "anon") String userId,
+            @RequestBody Map<String, String> payload) {
+        return updateTicketStatus(id, role, userId, payload);
+    }
+
+    // Admin assigns technician
+    @PatchMapping("/{id}/assign")
+    public ResponseEntity<?> assignTechnician(
+            @PathVariable String id,
+            @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role,
+            @RequestBody Map<String, String> payload) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can assign technicians.");
+        }
+
+        Optional<MaintenanceTicket> ticketOpt = ticketRepository.findById(id);
+        if (ticketOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        MaintenanceTicket ticket = ticketOpt.get();
+        String rawTechnicianId = payload.get("technicianId");
+        String resolvedTechnicianId = resolveTechnicianId(rawTechnicianId);
+        if (resolvedTechnicianId == null || resolvedTechnicianId.isBlank()) {
+            return ResponseEntity.badRequest().body("Invalid technician ID.");
+        }
+
+        String technicianName = payload.get("technicianName");
+        if (technicianName == null || technicianName.isBlank()) {
+            technicianName = backendUserRepository.findById(resolvedTechnicianId)
+                    .map(user -> {
+                        String fullName = String.format(
+                                "%s %s",
+                                user.getFirstName() == null ? "" : user.getFirstName(),
+                                user.getLastName() == null ? "" : user.getLastName()
+                        ).trim();
+                        return fullName.isEmpty() ? user.getEmail() : fullName;
+                    })
+                    .orElse("Technician");
+        }
+
+        ticket.setAssignedTechnicianId(resolvedTechnicianId);
+        ticket.setAssignedTechnicianName(technicianName);
+        ticket.setUpdatedAt(LocalDateTime.now());
+        ticketRepository.save(ticket);
+
+        CreateNotificationRequest request = new CreateNotificationRequest();
+        request.setUserId(resolvedTechnicianId);
+        request.setType(NotificationType.TICKET);
+        request.setMessage(String.format(
+                "You have been assigned ticket %s (%s priority).",
+                ticket.getTicketNumber(),
+                ticket.getPriority()
+        ));
+        notificationService.create(request);
+
+        return ResponseEntity.ok(ticket);
+    }
+
+    // Admin rejects ticket with reason
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<?> rejectTicket(
+            @PathVariable String id,
+            @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role,
+            @RequestBody Map<String, String> payload) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can reject tickets.");
+        }
+
+        Optional<MaintenanceTicket> ticketOpt = ticketRepository.findById(id);
+        if (ticketOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        MaintenanceTicket ticket = ticketOpt.get();
+        ticket.setStatus(Status.REJECTED);
+        ticket.setRejectionReason(payload.getOrDefault("reason", "Rejected by admin"));
+        ticket.setUpdatedAt(LocalDateTime.now());
+        ticketRepository.save(ticket);
+
+        return ResponseEntity.ok(ticket);
+    }
+
+    // Technician/Admin adds resolution notes
+    @PatchMapping("/{id}/resolution")
+    public ResponseEntity<?> addResolutionNotes(
+            @PathVariable String id,
+            @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role,
+            @RequestHeader(value = "X-User-Id", defaultValue = "anon") String userId,
+            @RequestBody Map<String, String> payload) {
+        if (!isAdminOrTechnician(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN or TECHNICIAN can add resolution notes.");
+        }
+
+        Optional<MaintenanceTicket> ticketOpt = ticketRepository.findById(id);
+        if (ticketOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        MaintenanceTicket ticket = ticketOpt.get();
+        if (isTechnician(role) && (ticket.getAssignedTechnicianId() == null || !userId.equals(ticket.getAssignedTechnicianId()))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Technicians can only add notes to assigned tickets.");
+        }
+
+        String resolutionNotes = payload.get("resolutionNotes");
+        if (resolutionNotes == null || resolutionNotes.isBlank()) {
+            return ResponseEntity.badRequest().body("Resolution notes are required.");
+        }
+
+        ticket.setResolutionNotes(resolutionNotes.trim());
+        ticket.setUpdatedAt(LocalDateTime.now());
+        ticketRepository.save(ticket);
+
         return ResponseEntity.ok(ticket);
     }
 

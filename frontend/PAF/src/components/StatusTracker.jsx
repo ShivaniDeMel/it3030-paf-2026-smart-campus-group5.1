@@ -1,14 +1,17 @@
-import React from 'react';
-
-const steps = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
+const steps = ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"];
 
 const StatusTracker = ({ status }) => {
-  // If rejected, we show a special path
-  if (status === 'REJECTED') {
+  if (status === "REJECTED") {
     return (
-      <div className="tracker-container">
-         <div className="tracker-step completed"><div className="step-circle">1</div><span>OPEN</span></div>
-         <div className="tracker-step rejected"><div className="step-circle">X</div><span style={{color: 'var(--status-rejected)'}}>REJECTED</span></div>
+      <div className="flex items-center gap-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 text-xs font-semibold">
+          <span className="h-5 w-5 rounded-full bg-emerald-600 text-white inline-flex items-center justify-center">1</span>
+          OPEN
+        </div>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/20 text-red-200 border border-red-500/40 text-xs font-semibold">
+          <span className="h-5 w-5 rounded-full bg-red-600 text-white inline-flex items-center justify-center">X</span>
+          REJECTED
+        </div>
       </div>
     );
   }
@@ -16,16 +19,24 @@ const StatusTracker = ({ status }) => {
   const currentIndex = steps.indexOf(status);
 
   return (
-    <div className="tracker-container">
-      {steps.map((s, idx) => {
-        let className = "tracker-step";
-        if (idx < currentIndex) className += " completed";
-        if (idx === currentIndex) className += " active";
-        
+    <div className="flex flex-wrap items-center gap-2">
+      {steps.map((step, idx) => {
+        const isDone = idx < currentIndex;
+        const isCurrent = idx === currentIndex;
+        const className = isDone
+          ? "bg-emerald-500/20 text-emerald-200 border-emerald-500/40"
+          : isCurrent
+            ? "bg-orange-500/20 text-orange-100 border-orange-500/40"
+            : "bg-black/30 text-orange-200/70 border-orange-700/40";
         return (
-          <div key={s} className={className}>
-            <div className="step-circle">{idx < currentIndex ? '✓' : idx + 1}</div>
-            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{s.replace('_', ' ')}</span>
+          <div
+            key={step}
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold ${className}`}
+          >
+            <span className="h-5 w-5 rounded-full bg-black/35 text-white inline-flex items-center justify-center">
+              {isDone ? "✓" : idx + 1}
+            </span>
+            {step.replace("_", " ")}
           </div>
         );
       })}

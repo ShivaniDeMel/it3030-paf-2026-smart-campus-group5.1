@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Document(collection = "users")
+@Document(collection = "users_legacy")
 public class User {
     
     @Id

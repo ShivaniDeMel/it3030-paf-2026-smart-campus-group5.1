@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { facilityAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import {
   ArrowLeftIcon,
   BuildingOfficeIcon,
@@ -14,6 +15,7 @@ import {
 
 const AddFacility = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated, loading } = useAuth();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [facilityTypes, setFacilityTypes] = useState([]);
@@ -111,7 +113,7 @@ const AddFacility = () => {
         formDataToSend.append('image', formData.imageFile);
       }
 
-      await facilityAPI.createFacility(formDataToSend);
+      await facilityAPI.createFacility(formDataToSend, user);
       setSuccess(true);
       setTimeout(() => {
         navigate('/facilities');
@@ -121,6 +123,20 @@ const AddFacility = () => {
       console.error('Error creating facility:', err);
     }
   };
+
+  if (loading) {
+    return <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black flex items-center justify-center text-orange-100">Loading...</div>;
+  }
+
+  if (!isAuthenticated || user?.role !== 'ADMIN') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black flex items-center justify-center p-6">
+        <div className="glass-card p-6 text-orange-100 border border-red-700/40">
+          Only admins can create resources.
+        </div>
+      </div>
+    );
+  }
 
   if (success) {
     return (

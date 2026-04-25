@@ -15,12 +15,16 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/facilities")
+@RequestMapping({"/api/facilities", "/api/resources"})
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class FacilityController {
 
     @Autowired
     private FacilityService facilityService;
+
+    private boolean isAdmin(String role) {
+        return role != null && "ADMIN".equalsIgnoreCase(role);
+    }
 
     // Get all facilities
     @GetMapping
@@ -39,7 +43,11 @@ public class FacilityController {
     // Create new facility
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Facility> createFacility(@RequestParam Map<String, String> facilityData,
-                                                  @RequestParam(required = false) MultipartFile image) {
+                                                  @RequestParam(required = false) MultipartFile image,
+                                                  @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         // Create facility object from form data
         Facility facility = new Facility();
         facility.setName(facilityData.get("name"));
@@ -73,7 +81,11 @@ public class FacilityController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Facility> updateFacility(@Nonnull @PathVariable String id,
                                                    @RequestParam Map<String, String> facilityData,
-                                                   @RequestParam(required = false) MultipartFile image) {
+                                                   @RequestParam(required = false) MultipartFile image,
+                                                   @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         // Get existing facility
         Facility existingFacility = facilityService.getFacilityById(id);
         
@@ -106,7 +118,11 @@ public class FacilityController {
 
     // Delete facility
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFacility(@Nonnull @PathVariable String id) {
+    public ResponseEntity<Void> deleteFacility(@Nonnull @PathVariable String id,
+                                               @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         facilityService.deleteFacility(id);
         return ResponseEntity.noContent().build();
     }
