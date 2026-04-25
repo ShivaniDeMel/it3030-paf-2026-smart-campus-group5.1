@@ -1,0 +1,15 @@
+{
+    "java.configuration.updateBuildConfiguration": "forced",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.saveActions.organizeImports": true,
+    "java.autobuild.enabled": true,
+    "java.errors.incompleteClasspath.severity": "warning",
+    "java.jdt.ls.vmargs": "-javaagent:\"${user.home}/.m2/repository/org/projectlombok/lombok/1.18.44/lombok-1.18.44.jar\" -Xbootclasspath/a:\"${user.home}/.m2/repository/org/projectlombok/lombok/1.18.44/lombok-1.18.44.jar\"",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "${env:JAVA_HOME}"
+        }
+    ],
+    "java.server.launchMode": "Standard"
+}

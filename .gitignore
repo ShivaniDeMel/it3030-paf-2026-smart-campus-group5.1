@@ -137,3 +137,56 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Java/Spring Boot specific
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+target/
+# .mvn/
+# mvnw
+# mvnw.cmd
+
+# Spring Boot application properties with sensitive data
+# **/application.properties
+# **/application-*.properties
+# **/application.yml
+# **/application-*.yml
+!**/application.properties.example
+!**/application.yml.example
+
+# IDE specific
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
