@@ -49,10 +49,10 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-secondary-900 via-secondary-800 to-secondary-900 text-white">
+    <footer className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
       {/* Animated Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-transparent animate-gradient"></div>
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-transparent to-orange-500 animate-gradient"></div>
       </div>
       
       {/* Content */}
@@ -213,7 +213,7 @@ const Footer = () => {
         </div>
 
         {/* Decorative Bottom Border */}
-        <div className="h-2 bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500"></div>
+        <div className="h-2 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500"></div>
         
         {/* Animated Pattern */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50"></div>
