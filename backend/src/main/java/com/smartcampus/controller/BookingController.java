@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
+import jakarta.annotation.Nonnull;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -15,29 +15,37 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class BookingController {
 
     @Autowired
     private BookingService bookingService;
 
+    private boolean isAdmin(String role) {
+        return role != null && "ADMIN".equalsIgnoreCase(role);
+    }
+
     // Get all bookings
     @GetMapping
-    public ResponseEntity<List<Booking>> getAllBookings() {
+    public ResponseEntity<List<Booking>> getAllBookings(
+            @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         List<Booking> bookings = bookingService.getAllBookings();
         return ResponseEntity.ok(bookings);
     }
 
     // Get booking by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Booking> getBookingById(@NonNull @PathVariable String id) {
+    public ResponseEntity<Booking> getBookingById(@Nonnull @PathVariable String id) {
         Booking booking = bookingService.getBookingById(id);
         return ResponseEntity.ok(booking);
     }
 
     // Create new booking
     @PostMapping
-    public ResponseEntity<Booking> createBooking(@Valid @NonNull @RequestBody Booking booking) {
+    public ResponseEntity<Booking> createBooking(@Valid @Nonnull @RequestBody Booking booking) {
         String createdBy = "admin"; // In real app, get from authentication
         Booking createdBooking = bookingService.createBooking(booking, createdBy);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
@@ -45,8 +53,8 @@ public class BookingController {
 
     // Update booking
     @PutMapping("/{id}")
-    public ResponseEntity<Booking> updateBooking(@NonNull @PathVariable String id, 
-                                                 @Valid @NonNull @RequestBody Booking bookingDetails) {
+    public ResponseEntity<Booking> updateBooking(@Nonnull @PathVariable String id, 
+                                                 @Valid @Nonnull @RequestBody Booking bookingDetails) {
         String updatedBy = "admin"; // In real app, get from authentication
         Booking updatedBooking = bookingService.updateBooking(id, bookingDetails, updatedBy);
         return ResponseEntity.ok(updatedBooking);
@@ -54,14 +62,14 @@ public class BookingController {
 
     // Delete booking
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBooking(@NonNull @PathVariable String id) {
+    public ResponseEntity<Void> deleteBooking(@Nonnull @PathVariable String id) {
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
     }
 
     // Cancel booking
     @PostMapping("/{id}/cancel")
-    public ResponseEntity<Booking> cancelBooking(@NonNull @PathVariable String id, 
+    public ResponseEntity<Booking> cancelBooking(@Nonnull @PathVariable String id, 
                                                   @RequestBody Map<String, String> request) {
         String cancelledBy = "admin"; // In real app, get from authentication
         String reason = request.get("reason");
@@ -71,52 +79,77 @@ public class BookingController {
 
     // Approve booking
     @PostMapping("/{id}/approve")
-    public ResponseEntity<Booking> approveBooking(@NonNull @PathVariable String id, 
-                                                   @RequestBody Map<String, String> request) {
+    public ResponseEntity<Booking> approveBooking(@Nonnull @PathVariable String id, 
+                                                   @RequestBody Map<String, String> request,
+                                                   @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         String approvedBy = "admin"; // In real app, get from authentication
         String notes = request.get("notes");
         Booking approvedBooking = bookingService.approveBooking(id, notes, approvedBy);
         return ResponseEntity.ok(approvedBooking);
     }
 
+    // Approve booking (RESTful alias)
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<Booking> approveBookingPatch(@Nonnull @PathVariable String id,
+                                                        @RequestBody Map<String, String> request,
+                                                        @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        return approveBooking(id, request, role);
+    }
+
+    // Reject booking with reason
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<Booking> rejectBooking(@Nonnull @PathVariable String id,
+                                                 @RequestBody Map<String, String> request,
+                                                 @RequestHeader(value = "X-User-Role", defaultValue = "USER") String role) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        String reason = request.getOrDefault("reason", "Rejected by admin");
+        Booking rejectedBooking = bookingService.rejectBooking(id, reason, "admin");
+        return ResponseEntity.ok(rejectedBooking);
+    }
+
     // Get bookings by user
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Booking>> getBookingsByUser(@NonNull @PathVariable String userId) {
+    public ResponseEntity<List<Booking>> getBookingsByUser(@Nonnull @PathVariable String userId) {
         List<Booking> bookings = bookingService.getBookingsByUser(userId);
         return ResponseEntity.ok(bookings);
     }
 
     // Get bookings by facility
     @GetMapping("/facility/{facilityId}")
-    public ResponseEntity<List<Booking>> getBookingsByFacility(@NonNull @PathVariable String facilityId) {
+    public ResponseEntity<List<Booking>> getBookingsByFacility(@Nonnull @PathVariable String facilityId) {
         List<Booking> bookings = bookingService.getBookingsByFacility(facilityId);
         return ResponseEntity.ok(bookings);
     }
 
     // Get bookings by status
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<Booking>> getBookingsByStatus(@NonNull @PathVariable String status) {
+    public ResponseEntity<List<Booking>> getBookingsByStatus(@Nonnull @PathVariable String status) {
         List<Booking> bookings = bookingService.getBookingsByStatus(status);
         return ResponseEntity.ok(bookings);
     }
 
     // Get upcoming bookings for user
     @GetMapping("/user/{userId}/upcoming")
-    public ResponseEntity<List<Booking>> getUpcomingBookingsForUser(@NonNull @PathVariable String userId) {
+    public ResponseEntity<List<Booking>> getUpcomingBookingsForUser(@Nonnull @PathVariable String userId) {
         List<Booking> bookings = bookingService.getUpcomingBookingsForUser(userId);
         return ResponseEntity.ok(bookings);
     }
 
     // Get past bookings for user
     @GetMapping("/user/{userId}/past")
-    public ResponseEntity<List<Booking>> getPastBookingsForUser(@NonNull @PathVariable String userId) {
+    public ResponseEntity<List<Booking>> getPastBookingsForUser(@Nonnull @PathVariable String userId) {
         List<Booking> bookings = bookingService.getPastBookingsForUser(userId);
         return ResponseEntity.ok(bookings);
     }
 
     // Get bookings for specific date
     @GetMapping("/date/{date}")
-    public ResponseEntity<List<Booking>> getBookingsByDate(@NonNull @PathVariable String date) {
+    public ResponseEntity<List<Booking>> getBookingsByDate(@Nonnull @PathVariable String date) {
         // Parse date string and convert to LocalDateTime
         LocalDateTime startOfDay = LocalDateTime.parse(date + "T00:00:00");
         LocalDateTime endOfDay = LocalDateTime.parse(date + "T23:59:59");

@@ -1,7 +1,14 @@
-import BookingCard from './BookingCard';
-import { InboxIcon } from '@heroicons/react/24/outline';
+import { InboxIcon } from "@heroicons/react/24/outline";
+import BookingCard from "./BookingCard";
 
-const BookingList = ({ bookings, onCancel, onApprove, onReject, isAdmin = false, loading = false }) => {
+const BookingList = ({
+  bookings,
+  onCancel,
+  onApprove,
+  onReject,
+  isAdmin = false,
+  loading = false,
+}) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
@@ -15,7 +22,9 @@ const BookingList = ({ bookings, onCancel, onApprove, onReject, isAdmin = false,
       <div className="text-center py-20">
         <InboxIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-500">No bookings found</h3>
-        <p className="text-sm text-gray-400 mt-1">Bookings will appear here once created.</p>
+        <p className="text-sm text-gray-400 mt-1">
+          Bookings will appear here once created.
+        </p>
       </div>
     );
   }

@@ -8,7 +8,7 @@ import com.smartcampus.model.Facility;
 import com.smartcampus.repository.BookingRepository;
 import com.smartcampus.repository.FacilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
+import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,13 +32,13 @@ public class BookingService {
     }
 
     // Get booking by ID
-    public Booking getBookingById(@NonNull String id) {
+    public Booking getBookingById(@Nonnull String id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
     }
 
     // Create new booking
-    public Booking createBooking(@NonNull Booking booking, @NonNull String createdBy) {
+    public Booking createBooking(@Nonnull Booking booking, @Nonnull String createdBy) {
         // Validate facility exists and is available
         String facilityId = booking.getFacilityId();
         if (facilityId == null) {
@@ -47,7 +47,7 @@ public class BookingService {
         Facility facility = facilityRepository.findById(facilityId)
                 .orElseThrow(() -> new ResourceNotFoundException("Facility not found with id: " + facilityId));
 
-        if (!"active".equals(facility.getStatus())) {
+        if (facility.getStatus() == null || !"active".equalsIgnoreCase(facility.getStatus())) {
             throw new BusinessException("Facility is not available for booking");
         }
 
@@ -75,7 +75,7 @@ public class BookingService {
     }
 
     // Update booking
-    public Booking updateBooking(@NonNull String id, @NonNull Booking bookingDetails, String updatedBy) {
+    public Booking updateBooking(@Nonnull String id, @Nonnull Booking bookingDetails, String updatedBy) {
         Booking existingBooking = getBookingById(id);
 
         // Only allow updates if booking is pending or confirmed
@@ -99,7 +99,7 @@ public class BookingService {
     }
 
     // Delete booking
-    public void deleteBooking(@NonNull String id) {
+    public void deleteBooking(@Nonnull String id) {
         Booking booking = getBookingById(id);
         
         // Only allow deletion if booking is pending or cancelled
@@ -111,7 +111,7 @@ public class BookingService {
     }
 
     // Cancel booking
-    public Booking cancelBooking(@NonNull String id, String reason, String cancelledBy) {
+    public Booking cancelBooking(@Nonnull String id, String reason, String cancelledBy) {
         Booking booking = getBookingById(id);
         
         if (booking.isCancelled()) {
@@ -132,7 +132,7 @@ public class BookingService {
     }
 
     // Approve booking
-    public Booking approveBooking(@NonNull String id, String notes, String approvedBy) {
+    public Booking approveBooking(@Nonnull String id, String notes, String approvedBy) {
         Booking booking = getBookingById(id);
         
         if (!"pending".equals(booking.getStatus())) {
@@ -148,28 +148,45 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
+    // Reject booking with reason (admin flow)
+    public Booking rejectBooking(@Nonnull String id, String reason, String rejectedBy) {
+        Booking booking = getBookingById(id);
+
+        if (!"pending".equals(booking.getStatus())) {
+            throw new BusinessException("Only pending bookings can be rejected");
+        }
+
+        booking.setStatus("cancelled");
+        booking.setCancellationReason(reason);
+        booking.setCancelledBy(rejectedBy);
+        booking.setCancelledAt(LocalDateTime.now());
+        booking.setUpdatedAt(LocalDateTime.now());
+
+        return bookingRepository.save(booking);
+    }
+
     // Get bookings by user
-    public List<Booking> getBookingsByUser(@NonNull String userId) {
+    public List<Booking> getBookingsByUser(@Nonnull String userId) {
         return bookingRepository.findByUserId(userId);
     }
 
     // Get bookings by facility
-    public List<Booking> getBookingsByFacility(@NonNull String facilityId) {
+    public List<Booking> getBookingsByFacility(@Nonnull String facilityId) {
         return bookingRepository.findByFacilityId(facilityId);
     }
 
     // Get bookings by status
-    public List<Booking> getBookingsByStatus(@NonNull String status) {
+    public List<Booking> getBookingsByStatus(@Nonnull String status) {
         return bookingRepository.findByStatus(status);
     }
 
     // Get upcoming bookings for user
-    public List<Booking> getUpcomingBookingsForUser(@NonNull String userId) {
+    public List<Booking> getUpcomingBookingsForUser(@Nonnull String userId) {
         return bookingRepository.findUpcomingBookings(userId, LocalDateTime.now());
     }
 
     // Get past bookings for user
-    public List<Booking> getPastBookingsForUser(@NonNull String userId) {
+    public List<Booking> getPastBookingsForUser(@Nonnull String userId) {
         return bookingRepository.findPastBookings(userId, LocalDateTime.now());
     }
 
@@ -179,7 +196,7 @@ public class BookingService {
     }
 
     // Check availability
-    public Map<String, Object> checkAvailability(@NonNull String facilityId, 
+    public Map<String, Object> checkAvailability(@Nonnull String facilityId, 
                                                   LocalDateTime startTime, LocalDateTime endTime) {
         // Validate facility exists
         Facility facility = facilityRepository.findById(facilityId)

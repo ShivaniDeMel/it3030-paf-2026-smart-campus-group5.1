@@ -6,7 +6,7 @@ import com.smartcampus.exception.BusinessException;
 import com.smartcampus.model.Facility;
 import com.smartcampus.repository.FacilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
+import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,13 +29,13 @@ public class FacilityService {
     }
 
     // Get facility by ID
-    public Facility getFacilityById(@NonNull String id) {
+    public Facility getFacilityById(@Nonnull String id) {
         return facilityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Facility not found with id: " + id));
     }
 
     // Create new facility
-    public Facility createFacility(@NonNull Facility facility, String createdBy) {
+    public Facility createFacility(@Nonnull Facility facility, String createdBy) {
         // Check if facility with same name and location already exists
         List<Facility> existingFacilities = facilityRepository.findByNameIgnoreCaseAndLocationIgnoreCase(
                 facility.getName(), facility.getLocation());
@@ -53,7 +53,7 @@ public class FacilityService {
     }
 
     // Update facility
-    public Facility updateFacility(@NonNull String id, @NonNull Facility facilityDetails, String updatedBy) {
+    public Facility updateFacility(@Nonnull String id, @Nonnull Facility facilityDetails, String updatedBy) {
         Facility existingFacility = getFacilityById(id);
         
         // Update fields
@@ -80,7 +80,7 @@ public class FacilityService {
     }
 
     // Delete facility
-    public void deleteFacility(@NonNull String id) {
+    public void deleteFacility(@Nonnull String id) {
         Facility facility = getFacilityById(id);
         if (facility == null) {
             throw new IllegalArgumentException("Facility cannot be null");
@@ -131,12 +131,12 @@ public class FacilityService {
     }
 
     // Get facilities by type
-    public List<Facility> getFacilitiesByType(@NonNull String type) {
+    public List<Facility> getFacilitiesByType(@Nonnull String type) {
         return facilityRepository.findByType(type);
     }
 
     // Get facilities by status
-    public List<Facility> getFacilitiesByStatus(@NonNull String status) {
+    public List<Facility> getFacilitiesByStatus(@Nonnull String status) {
         return facilityRepository.findByStatus(status);
     }
 
@@ -147,10 +147,10 @@ public class FacilityService {
         long total = allFacilities.size();
         
         // Count by status using stream instead of separate database calls
-        long active = allFacilities.stream().mapToLong(f -> "active".equals(f.getStatus()) ? 1 : 0).sum();
-        long maintenance = allFacilities.stream().mapToLong(f -> "maintenance".equals(f.getStatus()) ? 1 : 0).sum();
-        long outOfService = allFacilities.stream().mapToLong(f -> "out_of_service".equals(f.getStatus()) ? 1 : 0).sum();
-        long underReview = allFacilities.stream().mapToLong(f -> "under_review".equals(f.getStatus()) ? 1 : 0).sum();
+        long active = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("active") ? 1 : 0).sum();
+        long maintenance = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("maintenance") ? 1 : 0).sum();
+        long outOfService = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("out_of_service") ? 1 : 0).sum();
+        long underReview = allFacilities.stream().mapToLong(f -> f.getStatus() != null && f.getStatus().equalsIgnoreCase("under_review") ? 1 : 0).sum();
         
         // Count by facility type (case-insensitive matching)
         long lectureHall = allFacilities.stream().mapToLong(f -> f.getType() != null && f.getType().toLowerCase().contains("lecture") ? 1 : 0).sum();
@@ -212,7 +212,7 @@ public class FacilityService {
     }
 
     // Update facility utilization rate
-    public void updateFacilityUtilization(@NonNull String facilityId, double utilizationRate) {
+    public void updateFacilityUtilization(@Nonnull String facilityId, double utilizationRate) {
         Facility facility = getFacilityById(facilityId);
         facility.setUtilizationRate(utilizationRate);
         facility.setUpdatedAt(LocalDateTime.now());
@@ -220,7 +220,7 @@ public class FacilityService {
     }
 
     // Increment booking count
-    public void incrementBookingCount(@NonNull String facilityId) {
+    public void incrementBookingCount(@Nonnull String facilityId) {
         Facility facility = getFacilityById(facilityId);
         facility.setTotalBookings(facility.getTotalBookings() + 1);
         facility.setUpdatedAt(LocalDateTime.now());

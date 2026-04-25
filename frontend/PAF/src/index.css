@@ -1,135 +1,197 @@
-<<<<<<< HEAD
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@layer base {
-  :root {
-    --text: #4b5563;
-    --text-h: #111827;
-    --bg: #ffffff;
-    --border: #e5e7eb;
-    --code-bg: #f9fafb;
-    --accent: #f97316;
-    --accent-bg: rgba(249, 115, 22, 0.1);
-    --accent-border: rgba(249, 115, 22, 0.5);
-    --social-bg: rgba(249, 246, 237, 0.5);
-    --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-    --orange-glow: rgba(249, 115, 22, 0.3);
-    --black-glow: rgba(17, 24, 39, 0.3);
-  }
-
-  .dark {
-    --text: #d1d5db;
-    --text-h: #f9fafb;
-    --bg: #111827;
-    --border: #374151;
-    --code-bg: #1f2937;
-    --accent: #fb923c;
-    --accent-bg: rgba(251, 146, 60, 0.15);
-    --accent-border: rgba(251, 146, 60, 0.5);
-    --social-bg: rgba(55, 65, 81, 0.5);
-    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-    --orange-glow: rgba(251, 146, 60, 0.4);
-    --black-glow: rgba(31, 41, 55, 0.4);
-  }
+@theme {
+  --color-secondary-600: #4b5563;
+  --color-secondary-700: #374151;
+  --color-secondary-800: #1f2937;
+  --color-secondary-900: #111827;
+  /* Slightly lighter custom orange scale used across Tailwind classes */
+  --color-orange-500: #fb923c;
+  --color-orange-600: #f97316;
+  --color-orange-700: #ea7a33;
+  --color-orange-800: #d96a2c;
+  --color-orange-900: #b45324;
+  --color-orange-950: #7a3418;
 }
 
-@layer components {
-  body {
-    @apply bg-white dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  }
-
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent;
-  }
-
-  .gradient-border {
-    background: linear-gradient(135deg, #f97316, #111827);
-    padding: 2px;
-    border-radius: 0.5rem;
-  }
-
-  .card-hover {
-    @apply transition-all duration-300 transform hover:scale-105 hover:shadow-2xl;
-  }
-
-  .button-primary {
-    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300;
-  }
-
-  .button-secondary {
-    @apply bg-secondary-800 dark:bg-secondary-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300;
-  }
-
-  .glass-effect {
-    @apply backdrop-blur-md bg-white/20 dark:bg-secondary-900/20 border border-white/30 dark:border-secondary-700/30;
-  }
-
-  .neon-glow {
-    box-shadow: 0 0 20px var(--orange-glow), 0 0 40px var(--orange-glow);
-  }
-
-  .neon-glow-black {
-    box-shadow: 0 0 20px var(--black-glow), 0 0 40px var(--black-glow);
-  }
+:root {
+  --primary-500: #f97316;
+  --secondary-600: #4b5563;
+  --secondary-900: #111827;
+  --text-100: #f9fafb;
+  --text-600: #4b5563;
+  --bg-100: #fff7ed;
+  --bg-200: #ffffff;
 }
 
-@layer utilities {
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  .animate-pulse-glow {
-    animation: pulseGlow 2s infinite;
-  }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
-  }
+* {
+  box-sizing: border-box;
 }
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-secondary-100 dark:bg-secondary-800;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-primary-500 to-primary-700 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply from-primary-600 to-primary-800;
-}
-
-/* Selection color */
-::selection {
-  @apply bg-primary-500 text-white;
-}
-
-::-moz-selection {
-  @apply bg-primary-500 text-white;
-}
-
-/* Loading animation */
-.loading-spinner {
-  @apply animate-spin rounded-full border-4 border-primary-200 border-t-primary-600;
-=======
-@import "tailwindcss";
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-100);
+  background: #000;
 }
 
 #root {
   min-height: 100vh;
->>>>>>> a5f16d40fa5997530e216669b1a1e63259a4d39a
+}
+
+/* -------------------------------------------------------------
+   Shared design language for Smart Campus
+   Dark-orange gradient theme matching Facilities + Dashboard
+   ------------------------------------------------------------- */
+
+.gradient-text {
+  background: linear-gradient(90deg, #fdba74, #fb923c, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #fb923c, #f97316);
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  box-shadow: 0 10px 25px -12px rgba(249, 115, 22, 0.45);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.button-primary:hover {
+  transform: scale(1.04);
+  filter: brightness(1.08);
+  box-shadow: 0 15px 35px -12px rgba(249, 115, 22, 0.58);
+}
+
+.button-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  color: #ffedd5;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(251, 146, 60, 0.28);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.button-ghost:hover {
+  transform: scale(1.04);
+  background: rgba(251, 146, 60, 0.16);
+  color: #fff;
+}
+
+.bg-gradient-orange {
+  background: linear-gradient(90deg, #fb923c, #f97316);
+}
+
+/* ---------- Animations ---------- */
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.8); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease forwards;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.6s ease forwards;
+}
+
+@keyframes bounce-in {
+  0% { opacity: 0; transform: scale(0.85) translateY(15px); }
+  60% { opacity: 1; transform: scale(1.03) translateY(-3px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-bounce-in {
+  opacity: 0;
+  animation: bounce-in 0.7s ease forwards;
+}
+
+/* ---------- Shared glass card ---------- */
+
+.glass-card {
+  background: linear-gradient(
+    135deg,
+    rgba(36, 22, 14, 0.76),
+    rgba(217, 106, 44, 0.36),
+    rgba(36, 22, 14, 0.76)
+  );
+  border: 1px solid rgba(251, 146, 60, 0.28);
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px -22px rgba(0, 0, 0, 0.48);
+}
+
+/* ---------- Form controls on dark background ---------- */
+
+.dark-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  color: #fff;
+  background: rgba(28, 18, 12, 0.5);
+  border: 1px solid rgba(251, 146, 60, 0.25);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark-input::placeholder {
+  color: rgba(255, 237, 213, 0.52);
+}
+
+.dark-input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25);
 }

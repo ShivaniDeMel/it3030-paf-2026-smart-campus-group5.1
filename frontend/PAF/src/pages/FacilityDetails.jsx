@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { facilityAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import {
   ArrowLeftIcon,
   BuildingOfficeIcon,
@@ -26,6 +27,8 @@ import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 const FacilityDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
   
   // Set initial facility data immediately to prevent loading
   const initialFacility = {
@@ -72,7 +75,7 @@ const FacilityDetails = () => {
   const handleDelete = async () => {
     try {
       setDeleteLoading(true);
-      await facilityAPI.deleteFacility(id);
+      await facilityAPI.deleteFacility(id, user);
       setShowDeleteModal(false);
       navigate('/facilities');
     } catch (err) {
@@ -241,20 +244,24 @@ const FacilityDetails = () => {
                 <CalendarIcon className="h-4 w-4 mr-2" />
                 Book Now
               </button>
-              <Link
-                to={`/facilities/edit/${facility.id}`}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-all duration-200"
-              >
-                <PencilSquareIcon className="h-4 w-4 mr-2" />
-                Edit
-              </Link>
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
-              >
-                <TrashIcon className="h-4 w-4 mr-2" />
-                Delete
-              </button>
+              {isAdmin && (
+                <>
+                  <Link
+                    to={`/facilities/${facility.id}/edit`}
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-all duration-200"
+                  >
+                    <PencilSquareIcon className="h-4 w-4 mr-2" />
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+                  >
+                    <TrashIcon className="h-4 w-4 mr-2" />
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -423,13 +430,15 @@ const FacilityDetails = () => {
                   <CalendarIcon className="h-5 w-5 mr-2" />
                   Book Facility
                 </button>
-                <Link
-                  to={`/facilities/edit/${facility.id}`}
-                  className="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-all duration-200"
-                >
-                  <PencilSquareIcon className="h-5 w-5 mr-2" />
-                  Edit Details
-                </Link>
+                {isAdmin && (
+                  <Link
+                    to={`/facilities/${facility.id}/edit`}
+                    className="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-all duration-200"
+                  >
+                    <PencilSquareIcon className="h-5 w-5 mr-2" />
+                    Edit Details
+                  </Link>
+                )}
               </div>
             </div>
             {/* Facility Information Card */}

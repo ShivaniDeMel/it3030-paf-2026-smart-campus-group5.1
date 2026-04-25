@@ -6,28 +6,28 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   ExclamationTriangleIcon,
-} from '@heroicons/react/24/outline';
+} from "@heroicons/react/24/outline";
 
 const STATUS_STYLES = {
   PENDING: {
-    bg: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    bg: "bg-yellow-100 text-yellow-800 border-yellow-300",
     icon: ExclamationTriangleIcon,
-    label: 'Pending',
+    label: "Pending",
   },
   APPROVED: {
-    bg: 'bg-green-100 text-green-800 border-green-300',
+    bg: "bg-green-100 text-green-800 border-green-300",
     icon: CheckCircleIcon,
-    label: 'Approved',
+    label: "Approved",
   },
   REJECTED: {
-    bg: 'bg-red-100 text-red-800 border-red-300',
+    bg: "bg-red-100 text-red-800 border-red-300",
     icon: XCircleIcon,
-    label: 'Rejected',
+    label: "Rejected",
   },
   CANCELLED: {
-    bg: 'bg-gray-100 text-gray-800 border-gray-300',
+    bg: "bg-gray-100 text-gray-800 border-gray-300",
     icon: XCircleIcon,
-    label: 'Cancelled',
+    label: "Cancelled",
   },
 };
 
@@ -37,7 +37,6 @@ const BookingCard = ({ booking, onCancel, onApprove, onReject, isAdmin = false }
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-      {/* Status Header */}
       <div className={`px-5 py-3 flex items-center justify-between ${statusConfig.bg} border-b`}>
         <div className="flex items-center gap-2">
           <StatusIcon className="h-5 w-5" />
@@ -48,7 +47,6 @@ const BookingCard = ({ booking, onCancel, onApprove, onReject, isAdmin = false }
         </span>
       </div>
 
-      {/* Body */}
       <div className="p-5 space-y-3">
         <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
           <BuildingOfficeIcon className="h-5 w-5 text-orange-500" />
@@ -69,18 +67,18 @@ const BookingCard = ({ booking, onCancel, onApprove, onReject, isAdmin = false }
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <ClockIcon className="h-4 w-4 text-orange-500" />
           <span>
-            {booking.startTime} - {booking.endTime}
+            {booking.startClock} - {booking.endClock}
           </span>
         </div>
 
         <p className="text-sm text-gray-600 bg-orange-50 p-3 rounded-lg">
-          <span className="font-medium text-orange-700">Purpose:</span> {booking.purpose}
+          <span className="font-medium text-orange-700">Purpose:</span>{" "}
+          {booking.purpose || "N/A"}
         </p>
       </div>
 
-      {/* Actions */}
       <div className="px-5 pb-5 flex gap-2">
-        {isAdmin && booking.status === 'PENDING' && (
+        {isAdmin && booking.status === "PENDING" && (
           <>
             <button
               onClick={() => onApprove(booking.id)}
@@ -99,7 +97,7 @@ const BookingCard = ({ booking, onCancel, onApprove, onReject, isAdmin = false }
           </>
         )}
 
-        {!isAdmin && booking.status === 'PENDING' && (
+        {!isAdmin && booking.status === "PENDING" && (
           <button
             onClick={() => onCancel(booking.id)}
             className="flex-1 py-2 px-4 bg-gray-500 text-white text-sm font-medium rounded-xl hover:bg-gray-600 transition-all duration-300 flex items-center justify-center gap-1"

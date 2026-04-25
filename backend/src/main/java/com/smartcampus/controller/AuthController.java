@@ -7,14 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/auth")
+@RestController("legacyAuthController")
+@RequestMapping("/auth/legacy")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class AuthController {
     

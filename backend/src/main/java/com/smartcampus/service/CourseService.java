@@ -7,8 +7,8 @@ import com.smartcampus.exception.ResourceAlreadyExistsException;
 import com.smartcampus.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +30,11 @@ public class CourseService {
         return courseRepository.save(course);
     }
     
-    public Optional<Course> getCourseById(@NonNull String id) {
+    public Optional<Course> getCourseById(@Nonnull String id) {
         return courseRepository.findById(id);
     }
     
-    public Optional<Course> getCourseByCourseCode(@NonNull String courseCode) {
+    public Optional<Course> getCourseByCourseCode(@Nonnull String courseCode) {
         return courseRepository.findByCourseCode(courseCode);
     }
     
@@ -42,19 +42,19 @@ public class CourseService {
         return courseRepository.findByIsActive(true);
     }
     
-    public List<Course> searchCoursesByName(@NonNull String courseName) {
+    public List<Course> searchCoursesByName(@Nonnull String courseName) {
         return courseRepository.findByCourseNameContainingIgnoreCase(courseName);
     }
     
-    public List<Course> getCoursesByDepartment(@NonNull String department) {
+    public List<Course> getCoursesByDepartment(@Nonnull String department) {
         return courseRepository.findByDepartment(department);
     }
     
-    public List<Course> getCoursesByInstructor(@NonNull String instructorId) {
+    public List<Course> getCoursesByInstructor(@Nonnull String instructorId) {
         return courseRepository.findByInstructorId(instructorId);
     }
     
-    public List<Course> getCoursesBySemesterAndYear(@NonNull String semester, @NonNull String academicYear) {
+    public List<Course> getCoursesBySemesterAndYear(@Nonnull String semester, @Nonnull String academicYear) {
         return courseRepository.findBySemesterAndAcademicYear(semester, academicYear);
     }
     
@@ -64,7 +64,7 @@ public class CourseService {
     
     @Transactional
     @SuppressWarnings("type.uncertainty")
-    public @Nullable Course updateCourse(@NonNull String id, @NonNull Course courseDetails) {
+    public @Nullable Course updateCourse(@Nonnull String id, @Nonnull Course courseDetails) {
         Course course = courseRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
         
@@ -112,13 +112,12 @@ public class CourseService {
             course.setClassroom(courseDetails.getClassroom());
         }
         
-        @SuppressWarnings("null")
         Course result = courseRepository.save(course);
         return result;
     }
     
     @Transactional
-    public void deleteCourse(@NonNull String id) {
+    public void deleteCourse(@Nonnull String id) {
         Course course = courseRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
         course.setIsActive(false);
@@ -126,7 +125,7 @@ public class CourseService {
     }
     
     @Transactional
-    public Course enrollStudent(@NonNull String courseId, @NonNull String studentId) {
+    public Course enrollStudent(@Nonnull String courseId, @Nonnull String studentId) {
         Course course = courseRepository.findById(courseId)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
         
@@ -149,7 +148,7 @@ public class CourseService {
     }
     
     @Transactional
-    public Course dropStudent(@NonNull String courseId, @NonNull String studentId) {
+    public Course dropStudent(@Nonnull String courseId, @Nonnull String studentId) {
         Course course = courseRepository.findById(courseId)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
         
@@ -161,7 +160,7 @@ public class CourseService {
         return courseRepository.save(course);
     }
     
-    public List<Course> getStudentCourses(@NonNull String studentId) {
+    public List<Course> getStudentCourses(@Nonnull String studentId) {
         return courseRepository.findByEnrolledStudent(studentId);
     }
 }

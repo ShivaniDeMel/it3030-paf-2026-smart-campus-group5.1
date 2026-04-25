@@ -7,13 +7,13 @@ import com.smartcampus.exception.ResourceAlreadyExistsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service("legacyUserService")
 public class UserService {
     
     private final UserRepository userRepository;
@@ -40,15 +40,15 @@ public class UserService {
         return userRepository.save(user);
     }
     
-    public Optional<User> getUserById(@NonNull String id) {
+    public Optional<User> getUserById(@Nonnull String id) {
         return userRepository.findById(id);
     }
     
-    public Optional<User> getUserByUsername(@NonNull String username) {
+    public Optional<User> getUserByUsername(@Nonnull String username) {
         return userRepository.findByUsername(username);
     }
     
-    public Optional<User> getUserByEmail(@NonNull String email) {
+    public Optional<User> getUserByEmail(@Nonnull String email) {
         return userRepository.findByEmail(email);
     }
     
@@ -56,17 +56,17 @@ public class UserService {
         return userRepository.findAll();
     }
     
-    public List<User> getUsersByRole(@NonNull String role) {
+    public List<User> getUsersByRole(@Nonnull String role) {
         return userRepository.findByRoleAndIsActive(role);
     }
     
-    public List<User> getUsersByDepartment(@NonNull String department) {
+    public List<User> getUsersByDepartment(@Nonnull String department) {
         return userRepository.findByDepartmentAndIsActive(department);
     }
     
     @Transactional
     @SuppressWarnings("type.uncertainty")
-    public @Nullable User updateUser(@NonNull String id, @NonNull User userDetails) {
+    public @Nullable User updateUser(@Nonnull String id, @Nonnull User userDetails) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
@@ -111,20 +111,19 @@ public class UserService {
             user.setStudentId(userDetails.getStudentId());
         }
         
-        @SuppressWarnings("null")
         User result = userRepository.save(user);
         return result;
     }
     
     @Transactional
-    public void deleteUser(@NonNull String id) {
+    public void deleteUser(@Nonnull String id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         user.setIsActive(false);
         userRepository.save(user);
     }
     
-    public boolean authenticateUser(@NonNull String identifier, @NonNull String password) {
+    public boolean authenticateUser(@Nonnull String identifier, @Nonnull String password) {
         // Try by username first, then by email
         Optional<User> userOpt = userRepository.findByUsername(identifier);
         if (!userOpt.isPresent()) {
@@ -139,7 +138,7 @@ public class UserService {
     }
     
     @Transactional
-    public void enrollCourse(@NonNull String userId, @NonNull String courseId) {
+    public void enrollCourse(@Nonnull String userId, @Nonnull String courseId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
@@ -157,7 +156,7 @@ public class UserService {
     }
     
     @Transactional
-    public void dropCourse(@NonNull String userId, @NonNull String courseId) {
+    public void dropCourse(@Nonnull String userId, @Nonnull String courseId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         

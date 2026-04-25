@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { facilityAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import {
   ArrowLeftIcon,
   BuildingOfficeIcon,
@@ -15,6 +16,7 @@ import {
 const EditFacility = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, isAuthenticated, loading } = useAuth();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [facilityTypes, setFacilityTypes] = useState([]);
@@ -128,7 +130,7 @@ const EditFacility = () => {
         formDataToSend.append('image', formData.imageFile);
       }
 
-      await facilityAPI.updateFacility(id, formDataToSend);
+      await facilityAPI.updateFacility(id, formDataToSend, user);
       setSuccess(true);
       setTimeout(() => {
         navigate(`/facilities/${id}`);
@@ -138,6 +140,20 @@ const EditFacility = () => {
       console.error('Error updating facility:', err);
     }
   };
+
+  if (loading) {
+    return <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black flex items-center justify-center text-orange-100">Loading...</div>;
+  }
+
+  if (!isAuthenticated || user?.role !== 'ADMIN') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-black via-orange-800 to-black flex items-center justify-center p-6">
+        <div className="glass-card p-6 text-orange-100 border border-red-700/40">
+          Only admins can update resources.
+        </div>
+      </div>
+    );
+  }
 
   if (success) {
     return (
