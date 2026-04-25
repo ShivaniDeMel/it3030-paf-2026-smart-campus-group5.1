@@ -154,14 +154,6 @@ public class FacilityResponseDTO {
         this.description = description;
     }
 
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
     public List<String> getAmenities() {
         return amenities;
     }
@@ -184,6 +176,14 @@ public class FacilityResponseDTO {
 
     public void setRules(List<String> rules) {
         this.rules = rules;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public Facility.AvailableHours getAvailableHours() {
