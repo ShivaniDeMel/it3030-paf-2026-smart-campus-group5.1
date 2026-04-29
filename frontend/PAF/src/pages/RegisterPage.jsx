@@ -90,7 +90,12 @@ const RegisterPage = () => {
     const result = await register(formData);
     
     if (result.success) {
-      navigate('/dashboard');
+      // Registration successful, redirect to login
+      navigate('/login', { 
+        state: { 
+          message: 'Registration successful! Please login with your credentials.' 
+        } 
+      });
     } else {
       setErrors({ general: result.error });
     }

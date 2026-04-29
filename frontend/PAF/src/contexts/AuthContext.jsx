@@ -61,17 +61,24 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await authAPI.register(userData);
-      const { token, user: newUser } = response.data;
+      // Map frontend data to backend requirements
+      const backendUserData = {
+        username: userData.email.split('@')[0], // Generate username from email
+        email: userData.email,
+        password: userData.password,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        role: userData.userRole,
+        phone: userData.phone
+      };
+
+      const response = await authAPI.register(backendUserData);
+      const user = response.data; // Backend returns user object directly
       
-      // Store token and user data
-      localStorage.setItem('authToken', token);
-      localStorage.setItem('userData', JSON.stringify(newUser));
+      // Note: Backend doesn't return token on register, user needs to login
+      // For now, we'll just return success and let user login
       
-      setUser(newUser);
-      setIsAuthenticated(true);
-      
-      return { success: true };
+      return { success: true, user };
     } catch (error) {
       const message = error.response?.data?.error || 'Registration failed';
       return { success: false, error: message };

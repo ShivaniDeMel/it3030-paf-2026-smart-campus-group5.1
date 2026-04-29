@@ -119,4 +119,21 @@ public class AuthController {
         response.put("message", "Auth service is running");
         return ResponseEntity.ok(response);
     }
+    
+    @GetMapping("/test-db")
+    public ResponseEntity<?> testDatabase() {
+        try {
+            long userCount = userService.getAllUsers().size();
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "UP");
+            response.put("message", "Database connection successful");
+            response.put("userCount", userCount);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "DOWN");
+            response.put("error", "Database connection failed: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
 }
