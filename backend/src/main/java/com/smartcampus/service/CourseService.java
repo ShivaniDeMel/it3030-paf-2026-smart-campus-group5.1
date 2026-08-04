@@ -63,7 +63,6 @@ public class CourseService {
     }
     
     @Transactional
-    @SuppressWarnings("type.uncertainty")
     public @Nullable Course updateCourse(@NonNull String id, @NonNull Course courseDetails) {
         Course course = courseRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
@@ -112,7 +111,6 @@ public class CourseService {
             course.setClassroom(courseDetails.getClassroom());
         }
         
-        @SuppressWarnings("null")
         Course result = courseRepository.save(course);
         return result;
     }

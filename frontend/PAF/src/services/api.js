@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8089';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8089';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 5000,
+  timeout: 20000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,8 +35,8 @@ api.interceptors.response.use(
   (error) => {
     let errorMessage = 'API Error occurred';
     
-    if (error.code === 'ECONNABORTED') {
-      errorMessage = 'Request timeout - please try again';
+    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+      errorMessage = 'The server is taking too long to respond. Please try again in a moment.';
     } else if (error.response) {
       errorMessage = `Server error: ${error.response.status} - ${error.response.data?.message || error.response.statusText}`;
     } else if (error.request) {

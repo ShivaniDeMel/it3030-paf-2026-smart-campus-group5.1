@@ -34,14 +34,21 @@ const FacilitiesCatalogue = () => {
   useEffect(() => {
     fetchFacilities();
     fetchFilterOptions();
-  }, [searchTerm, filters]);
+  }, []);
 
-  const fetchFacilities = async () => {
+  const fetchFacilities = async (retryCount = 0) => {
     try {
+      setError(null);
       const response = await facilityAPI.getAllFacilities();
-      setFacilities(response.data);
+      setFacilities(response.data || []);
     } catch (err) {
-      setError('Failed to load facilities');
+      const shouldRetry = retryCount < 2 && (err.code === 'ECONNABORTED' || err.message?.includes('timeout') || !err.response);
+      if (shouldRetry) {
+        setTimeout(() => fetchFacilities(retryCount + 1), 1000);
+        return;
+      }
+
+      setError('Unable to reach the campus services right now. Please try again.');
       console.error('Error fetching facilities:', err);
     }
   };
