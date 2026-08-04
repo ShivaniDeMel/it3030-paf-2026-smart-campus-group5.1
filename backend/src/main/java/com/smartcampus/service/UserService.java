@@ -65,7 +65,6 @@ public class UserService {
     }
     
     @Transactional
-    @SuppressWarnings("type.uncertainty")
     public @Nullable User updateUser(@NonNull String id, @NonNull User userDetails) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -111,7 +110,6 @@ public class UserService {
             user.setStudentId(userDetails.getStudentId());
         }
         
-        @SuppressWarnings("null")
         User result = userRepository.save(user);
         return result;
     }
