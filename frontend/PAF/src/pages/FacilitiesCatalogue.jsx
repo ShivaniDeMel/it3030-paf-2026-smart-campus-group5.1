@@ -178,7 +178,7 @@ const FacilitiesCatalogue = () => {
             </span>
           </h1>
           <p className="text-xl text-gray-300 animate-slide-in" style={{ animationDelay: '0.3s' }}>
-            Discover amazing campus facilities with orange theme
+            Discover amazing campus facilities
           </p>
         </div>
         
